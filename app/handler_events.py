@@ -5,20 +5,26 @@ import json
 import logging
 import os
 import sys
-
-# 总开关
-from switch import handle_GroupSwitch_group_message
-
-# 菜单
-from menu import handle_Menu_group_message
-
-# api
-from api import *
-
-# 配置
-from config import *
+import asyncio
+from datetime import datetime
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+# 总开关
+from app.switch import handle_GroupSwitch_group_message
+
+# 菜单
+from app.menu import handle_Menu_group_message
+
+# 系统
+from app.sysyem import handle_System_group_message
+
+# api
+from app.api import *
+
+# 配置
+from app.config import *
 
 
 # 处理消息事件的逻辑
@@ -29,12 +35,16 @@ async def handle_message_event(websocket, msg):
 
             group_id = msg["group_id"]
             logging.info(f"处理群消息,群ID:{group_id}")
-            await handle_GroupSwitch_group_message(websocket, msg)  # 总开关
-            await handle_Menu_group_message(websocket, msg)  # 菜单
+            # 系统必需功能
+            await handle_System_group_message(websocket, msg)  # 处理系统消息
+            await handle_GroupSwitch_group_message(websocket, msg)  # 处理群组开关
+            await handle_Menu_group_message(websocket, msg)  # 处理菜单
+
+            # 依次执行scripts功能
 
         # 处理私聊消息
         elif msg.get("message_type") == "private":
-            # 由于私聊风险较大，不处理私聊消息，仅记录
+            # 由于私聊风险较大，不处理私聊消息，仅占位
             pass
 
         else:
@@ -71,19 +81,26 @@ async def handle_cron_task(websocket):
         logging.error(f"处理定时任务的逻辑错误: {e}")
 
 
+# 处理回应消息
+async def handle_response_message(websocket, message):
+    msg = json.loads(message)
+    if msg.get("status") == "ok":
+        pass
+
+
 # 处理ws消息
 async def handle_message(websocket, message):
 
     msg = json.loads(message)
 
-    # 排除回应消息
+    # 处理回应消息
     if msg.get("status") == "ok":
-        return
-
-    logging.info(f"处理消息: {msg}")
+        logging.info(f"处理回应消息")
+        await handle_response_message(websocket, message)
 
     # 处理事件
     if "post_type" in msg:
+        logging.info(f"处理事件消息")
         if msg["post_type"] == "message":
             # 处理消息事件
             await handle_message_event(websocket, msg)
