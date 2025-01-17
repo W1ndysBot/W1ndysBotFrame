@@ -34,7 +34,7 @@ async def connect_to_bot():
             )
             async for message in websocket:
                 # 处理ws消息
-                await handle_message(websocket, message)
+                asyncio.create_task(handle_message(websocket, message))
     else:
         async with websockets.connect(ws_url) as websocket:
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -48,7 +48,7 @@ async def connect_to_bot():
             )
             async for message in websocket:
                 # 处理ws消息
-                await handle_message(websocket, message)
+                asyncio.create_task(handle_message(websocket, message))
 
 
 if __name__ == "__main__":

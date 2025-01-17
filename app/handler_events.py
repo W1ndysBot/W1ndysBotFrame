@@ -10,7 +10,6 @@ from datetime import datetime
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
 # 总开关
 from app.switch import handle_GroupSwitch_group_message
 
@@ -33,8 +32,6 @@ async def handle_message_event(websocket, msg):
         # 处理群消息
         if msg.get("message_type") == "group":
 
-            group_id = msg["group_id"]
-            logging.info(f"处理群消息,群ID:{group_id}")
             # 系统必需功能
             await handle_System_group_message(websocket, msg)  # 处理系统消息
             await handle_GroupSwitch_group_message(websocket, msg)  # 处理群组开关
@@ -100,7 +97,7 @@ async def handle_message(websocket, message):
 
     # 处理事件
     if "post_type" in msg:
-        logging.info(f"处理事件消息")
+        logging.info(f"收到事件消息：{msg}")
         if msg["post_type"] == "message":
             # 处理消息事件
             await handle_message_event(websocket, msg)
