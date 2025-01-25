@@ -28,10 +28,6 @@ async def connect_to_bot():
             await send_group_msg(
                 websocket, report_group_id, f"机器人已连接。当前时间: {current_time}"
             )
-            await dingtalk(
-                f"机器人已连接。",
-                f"当前时间: {current_time}",
-            )
             async for message in websocket:
                 # 处理ws消息
                 asyncio.create_task(handle_message(websocket, message))
@@ -41,10 +37,6 @@ async def connect_to_bot():
             logging.info(f"已连接到机器人。当前时间: {current_time}")
             await send_group_msg(
                 websocket, report_group_id, f"机器人已连接。当前时间: {current_time}"
-            )
-            await dingtalk(
-                f"机器人已连接。",
-                f"当前时间: {current_time}",
             )
             async for message in websocket:
                 # 处理ws消息
