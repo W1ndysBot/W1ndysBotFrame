@@ -92,7 +92,7 @@ async def handle_message(websocket, message):
 
     # 处理回应消息
     if msg.get("status") == "ok":
-        logging.info(f"处理回应消息")
+        logging.info(f"收到回应消息：{msg}")
         await handle_response_message(websocket, message)
 
     # 处理事件
@@ -107,7 +107,7 @@ async def handle_message(websocket, message):
         elif msg["post_type"] == "request":
             # 处理请求事件
             await handle_request_event(websocket, msg)
-        elif msg["post_type"] == "meta_event":
+        elif msg["post_type"] == "meta_event" and msg["meta_event_type"] == "heartbeat":
             # 处理元事件
             await handle_meta_event(websocket, msg)
             # 处理定时任务，每个心跳周期检查一次
