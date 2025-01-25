@@ -104,7 +104,7 @@ async def send_group_msg(websocket, group_id, content):
         message = {
             "action": "send_group_msg",
             "params": {"group_id": group_id, "message": content},
-            "echo": "send_group_msg",
+            "echo": f"send_group_msg_{content}",
         }
         await websocket.send(json.dumps(message))
         logging.info(f"[API]已发送群消息到群 {group_id}")
@@ -125,27 +125,6 @@ async def send_group_msg_no_cq(websocket, group_id, content, auto_escape=True):
     }
     await websocket.send(json.dumps(message))
     logging.info(f"[API]已发送无CQ码的群消息到群 {group_id}")
-
-
-# 发送群消息并获取消息ID
-async def send_group_msg_with_reply(websocket, group_id, content):
-    try:
-        message = {
-            "action": "send_group_msg",
-            "params": {"group_id": group_id, "message": content},
-            "echo": "send_group_msg_with_reply",
-        }
-        await websocket.send(json.dumps(message))
-        while True:
-            response = await websocket.recv()
-            response_data = json.loads(response)
-            if response_data.get("echo") == "send_group_msg_with_reply":
-                message_id = response_data.get("data", {}).get("message_id")
-                logging.info(f"[API]已发送群消息到群 {group_id}，消息ID: {message_id}")
-                return message_id
-    except Exception as e:
-        logging.error(f"[API]发送群消息（带回复）失败: {e}")
-        return None
 
 
 # 给群分享推荐好友
@@ -488,7 +467,6 @@ async def get_group_msg_history(websocket, group_id, count, user_id):
         "echo": f"get_group_msg_history_{group_id}_{user_id}",
     }
     await websocket.send(json.dumps(history_msg))
-
 
 
 # 获取登录号信息
