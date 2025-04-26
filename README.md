@@ -2,6 +2,8 @@
 
 这是 https://github.com/W1ndys/W1ndysBot 的运行框架，基于 NapCat 和 Python 开发。
 
+本仓库可能更新不及时，如有需要，请参考 https://github.com/W1ndys/W1ndysBot 的最新更新
+
 ## 📁 项目结构
 
 ```
