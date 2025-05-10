@@ -5,7 +5,7 @@
 OWNER_ID = ["2769731875"]
 
 # WebSocket连接地址
-WS_URL = "ws://127.0.0.1:3001"
+WS_URL = "ws://127.0.0.1:3005"
 
 # 机器人Token
 TOKEN = "wsws"
