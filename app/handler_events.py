@@ -9,23 +9,9 @@ import asyncio
 # 核心模块
 from app.core.online_detect import Online_detect_manager
 
-# 违禁词检测模块
-from app.scripts.BanWordsPlus.main import BanWordsPlus_manager
 
 # 示例模块
 from app.scripts.Example.main import Example_manager
-
-# 群组信息模块
-from app.scripts.GroupInfo.main import GroupInfo_manager
-
-# 群组管理模块
-from app.scripts.GroupManager.main import GroupManager_manager
-
-# 刷屏检测模块
-from app.scripts.ChatSpamCheck.main import ChatSpamCheck_manager
-
-# 问答系统模块
-from app.scripts.QASystem.main import QASystem_manager
 
 
 class EventHandler:
@@ -34,11 +20,6 @@ class EventHandler:
         self.handlers = [
             Online_detect_manager.handle_events,  # 在线监测
             Example_manager.handle_events,  # 示例模块
-            GroupInfo_manager.handle_events,  # 群组信息模块
-            GroupManager_manager.handle_events,  # 群组管理模块
-            BanWordsPlus_manager.handle_events,  # 违禁词检测
-            ChatSpamCheck_manager.handle_events,  # 刷屏检测
-            QASystem_manager.handle_events,  # 问答系统模块
         ]
 
     async def handle_message(self, websocket, message):
