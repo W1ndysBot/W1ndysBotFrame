@@ -14,7 +14,7 @@ venv/
 .vscode/
 
 # 忽略.cursor文件夹
-# .cursor/
+.cursor/
 
 
 
@@ -195,4 +195,3 @@ cython_debug/
 .pypirc
 .cursorrules
 
-.cursor/
