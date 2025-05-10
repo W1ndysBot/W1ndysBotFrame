@@ -2,6 +2,7 @@
 
 import logging
 from app.api.message import send_group_msg
+from app.api.group import set_group_special_title
 from app.api.generate import *
 from app.scripts.GiveMeTitle.data_manager import DataManager
 
@@ -63,19 +64,29 @@ class GroupMessageHandler:
             if self.sub_type != "normal":
                 return
 
+            # 只处理授权群
+            if self.group_id not in ["1049103154"]:
+                return
+
             # 在这里加载当前群的开关状态
             self.switch_status = self.data_manager.load_function_status(self.group_id)
 
-            # 处理开关命令
-            if self.raw_message.lower() == "GiveMeTitle":
-                await self.toggle_function_status()
-                return
-
-            # 检查功能是否开启
-            if self.switch_status:
-                # 处理群消息的主要逻辑
-                await self._process_group_message()
-
+            if self.raw_message.startswith("给我头衔"):
+                # 提取头衔
+                title = self.raw_message.split("给我头衔")[1].strip()
+                # 调用GiveMeTitle类
+                await set_group_special_title(
+                    self.websocket, self.group_id, self.user_id, title
+                )
+                # 发送回复消息
+                message = generate_reply_message(
+                    self.message_id
+                ) + generate_text_message(f"已设置头衔为: {title}")
+                await send_group_msg(
+                    self.websocket,
+                    self.group_id,
+                    message,
+                )
         except Exception as e:
             logging.error(f"[GiveMeTitle]处理群聊消息失败: {e}")
             if self.group_id:
