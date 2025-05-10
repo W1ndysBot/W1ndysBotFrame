@@ -1,7 +1,0 @@
-{
-  "owner_id": ["2769731875"],
-  "ws_url": "ws://127.0.0.1:3001",
-  "token": "wsws",
-  "DD_BOT_TOKEN": "dingtalk_token",
-  "DD_BOT_SECRET": "dingtalk_secret"
-}
