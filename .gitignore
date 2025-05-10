@@ -1,3 +1,24 @@
+# 忽略data文件夹
+# data/
+
+# 忽略logs文件夹
+logs/
+
+# 忽略venv文件夹
+venv/
+
+# 忽略.idea文件夹
+.idea/
+
+# 忽略.vscode文件夹
+.vscode/
+
+# 忽略.cursor文件夹
+# .cursor/
+
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -167,5 +188,11 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# Ruff stuff:
+.ruff_cache/
+
 # PyPI configuration file
 .pypirc
+.cursorrules
+
+.cursor/
