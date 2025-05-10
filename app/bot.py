@@ -3,8 +3,7 @@
 import logging
 import asyncio
 import websockets
-import json
-from config import config
+import config
 from datetime import datetime
 from handler_events import event_handler
 from api.message import send_private_msg
