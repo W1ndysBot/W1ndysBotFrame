@@ -1,17 +1,91 @@
+import asyncio
 import json
 import logging
+import uuid
+
+
+# 使用cq码发送群消息
+async def send_group_msg_with_cq(websocket, group_id, content):
+    """
+    发送群消息，使用旧的消息格式
+
+    https://napcat.apifox.cn/226799128e0
+    """
+    try:
+        # 使用更短的随机字符串
+        # random_str = str(uuid.uuid4())[:8]
+        # content = f"{content}\n\n随机ID: {random_str}"
+        message = {
+            "action": "send_group_msg",
+            "params": {"group_id": group_id, "message": content},
+            "echo": f"send_group_msg_{content}",
+        }
+        await websocket.send(json.dumps(message))
+        logging.info(f"[API]已发送群消息到群 {group_id}")
+        await asyncio.sleep(0.5)
+    except Exception as e:
+        logging.error(f"[API]发送群消息失败: {e}")
+
+
+# 使用cq码发送私聊消息
+async def send_private_msg_with_cq(websocket, user_id, content):
+    """
+    发送私聊消息，使用旧的消息格式
+
+    https://napcat.apifox.cn/226799128e0
+    """
+    try:
+        # 使用更短的随机字符串
+        # random_str = str(uuid.uuid4())[:8]
+        # content = f"{content}\n\n随机ID: {random_str}"
+        message = {
+            "action": "send_private_msg",
+            "params": {"user_id": user_id, "message": content},
+            "echo": "send_private_msg",
+        }
+        await websocket.send(json.dumps(message))
+        logging.info(f"[API]已发送消息到用户 {user_id}")
+        await asyncio.sleep(0.5)
+    except Exception as e:
+        logging.error(f"[API]发送私聊消息失败: {e}")
 
 
 async def send_group_msg(websocket, group_id, message):
     """
-    发送群聊消息
+    发送群聊消息，使用新的消息格式
+    {
+        "type": "text",
+        "data": {"text": "消息内容"}
+    }
+    https://napcat.apifox.cn/226799128e0
     """
     try:
-        message = {
+        # 检查message是否为字符串，如果是则转换为列表格式
+        if isinstance(message, str):
+            message = [{"type": "text", "data": {"text": message}}]
+        elif isinstance(message, dict):  # 单个消息对象
+            message = [message]
+        elif not isinstance(message, list):
+            message = [{"type": "text", "data": {"text": str(message)}}]
+
+        # 给message添加随机字符串防止频繁
+        # random_str = str(uuid.uuid4())[:8]
+        # message.append(
+        #     {
+        #         "type": "text",
+        #         "data": {"text": f"\n\n随机ID: {random_str}"},
+        #     }
+        # )
+
+        message_data = {
             "action": "send_group_msg",
-            "params": {"group_id": group_id, "message": message},
+            "params": {
+                "group_id": group_id,
+                "message": message,
+            },
+            "echo": f"send_group_msg_{group_id}",
         }
-        await websocket.send(json.dumps(message))
+        await websocket.send(json.dumps(message_data))
         return True
     except Exception as e:
         logging.error(f"[API]发送群聊消息失败: {e}")
@@ -20,14 +94,35 @@ async def send_group_msg(websocket, group_id, message):
 
 async def send_private_msg(websocket, user_id, message):
     """
-    发送私聊消息
+    发送私聊消息，使用新的消息格式
+    {
+        "type": "text",
+        "data": {"text": "消息内容"}
+    }
+    https://napcat.apifox.cn/226799128e0
     """
     try:
-        message = {
+        # 检查message是否为字符串，如果是则转换为列表格式
+        if isinstance(message, str):
+            message = [{"type": "text", "data": {"text": message}}]
+        elif isinstance(message, dict):  # 单个消息对象
+            message = [message]
+        elif not isinstance(message, list):
+            message = [{"type": "text", "data": {"text": str(message)}}]
+
+        # 给message添加随机字符串防止频繁
+        # random_str = str(uuid.uuid4())[:8]
+        # message.append(
+        #     {
+        #         "type": "text",
+        #         "data": {"text": f"\n\n随机ID: {random_str}"},
+        #     }
+        # )
+        message_data = {
             "action": "send_private_msg",
             "params": {"user_id": user_id, "message": message},
         }
-        await websocket.send(json.dumps(message))
+        await websocket.send(json.dumps(message_data))
         return True
     except Exception as e:
         logging.error(f"[API]发送私聊消息失败: {e}")
@@ -141,14 +236,22 @@ async def get_file(websocket, file_id):
         return False
 
 
-async def get_group_msg_history(websocket, group_id, message_seq):
+async def get_group_msg_history(
+    websocket, group_id, user_id, count, message_seq=0, note=""
+):
     """
     获取群历史消息
     """
     try:
         message = {
             "action": "get_group_msg_history",
-            "params": {"group_id": group_id, "message_seq": message_seq},
+            "params": {
+                "group_id": group_id,
+                "message_seq": message_seq,
+                "count": count,
+                "reverseOrder": True,
+            },
+            "echo": f"get_group_msg_history_{group_id}_{user_id}_{note}",
         }
         await websocket.send(json.dumps(message))
         return True
@@ -232,12 +335,16 @@ async def fetch_emoji_like(websocket, message_id, emoji_id, emoji_type):
         return False
 
 
-async def get_forward_msg(websocket, message_id):
+async def get_forward_msg(websocket, message_id, note=""):
     """
     获取合并转发消息
     """
     try:
-        message = {"action": "get_forward_msg", "params": {"message_id": message_id}}
+        message = {
+            "action": "get_forward_msg",
+            "params": {"message_id": message_id},
+            "echo": f"get_forward_msg_{note}",
+        }
         await websocket.send(json.dumps(message))
         return True
     except Exception as e:

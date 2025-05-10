@@ -1,3 +1,3 @@
-# Example
+## Example 功能模块命令
 
-W1ndysBot 的功能模块编写示例文件
+Example 是一个示例模块，用于测试和演示。

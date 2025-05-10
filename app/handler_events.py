@@ -3,31 +3,56 @@
 
 import json
 import logging
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# 统一从各模块导入事件处理器
-from app.scripts.Example.main import handle_events as handle_Example_events
-
-# 系统模块
-from app.system import handle_events as handle_System_events
-from app.switch import handle_events as handle_Switch_events
+import asyncio
 
 
-# 处理ws消息
-async def handle_message(websocket, message):
-    try:
-        msg = json.loads(message)
+# 核心模块
+from app.core.online_detect import Online_detect_manager
 
-        logging.info(f"收到ws事件：{msg}")
+# 违禁词检测模块
+from app.scripts.BanWordsPlus.main import BanWordsPlus_manager
 
-        # 系统基础功能
-        await handle_System_events(websocket, msg)
-        await handle_Switch_events(websocket, msg)
+# 示例模块
+from app.scripts.Example.main import Example_manager
 
-        # 功能模块事件处理
-        await handle_Example_events(websocket, msg)
-    except Exception as e:
-        logging.error(f"处理ws消息的逻辑错误: {e}")
+# 群组信息模块
+from app.scripts.GroupInfo.main import GroupInfo_manager
+
+# 群组管理模块
+from app.scripts.GroupManager.main import GroupManager_manager
+
+# 刷屏检测模块
+from app.scripts.ChatSpamCheck.main import ChatSpamCheck_manager
+
+# 问答系统模块
+from app.scripts.QASystem.main import QASystem_manager
+
+
+class EventHandler:
+    def __init__(self):
+        # 事件处理器列表
+        self.handlers = [
+            Online_detect_manager.handle_events,  # 在线监测
+            Example_manager.handle_events,  # 示例模块
+            GroupInfo_manager.handle_events,  # 群组信息模块
+            GroupManager_manager.handle_events,  # 群组管理模块
+            BanWordsPlus_manager.handle_events,  # 违禁词检测
+            ChatSpamCheck_manager.handle_events,  # 刷屏检测
+            QASystem_manager.handle_events,  # 问答系统模块
+        ]
+
+    async def handle_message(self, websocket, message):
+        """处理websocket消息"""
+        try:
+            msg = json.loads(message)
+            logging.info(f"{'*' * 100}\n收到事件：{msg}\n{'*' * 100}\n\n")
+            # 并发调用各个模块的事件处理器
+            tasks = [handler(websocket, msg) for handler in self.handlers]
+            await asyncio.gather(*tasks)
+
+        except Exception as e:
+            logging.error(f"处理websocket消息的逻辑错误: {e}")
+
+
+# 创建全局实例
+event_handler = EventHandler()

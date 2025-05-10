@@ -1,207 +1,154 @@
-# script/example/main.py
+# app/scripts/Example/main.py
 
 import logging
 import os
 import sys
-import re
-import json
 
 # 添加项目根目录到sys.path
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 )
 
-from app.config import *
-from app.api import *
-from app.switch import load_switch, save_switch
+from app.api.message import send_group_msg, send_private_msg
+from app.scripts.Example.data_manager import DataManager
+from app.scripts.Example.message_handler import MessageHandler
+from app.scripts.Example.notice_handler import NoticeHandler
+from app.scripts.Example.request_handler import RequestHandler
+from app.scripts.Example.response_handler import ResponseHandler
 
 
-# 数据存储路径，实际开发时，请将Example替换为具体的数据存放路径
-DATA_DIR = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-    "data",
-    "Example",
-)
+class ExampleManager:
+    """示例管理类 - 使用组合模式重构
 
+    通过组合不同的处理器，实现模块化设计，包括：
+    - 数据管理器：负责数据存储和功能开关
+    - 消息处理器：负责群消息和私聊消息处理
+    - 通知处理器：负责各类通知事件处理
+    - 请求处理器：负责加好友和加群请求处理
+    - 响应处理器：负责API回调响应处理
+    """
 
-# 查看功能开关状态
-def load_function_status(group_id):
-    return load_switch(group_id, "Example")
+    def __init__(self):
+        """初始化各个子系统"""
+        try:
+            # 初始化各个子系统
+            self.websocket = None
+            self.data_manager = DataManager()
+            self.message_handler = MessageHandler()
+            self.notice_handler = NoticeHandler()
+            self.request_handler = RequestHandler()
+            self.response_handler = ResponseHandler()
+        except Exception as e:
+            logging.error(f"[Example]初始化ExampleManager失败: {e}")
+            raise
 
+    async def handle_meta_event(self, msg):
+        """处理元事件，如心跳等"""
+        try:
+            # 元事件处理逻辑，可用于定时任务等
+            meta_type = msg.get("meta_event_type", "")
 
-# 保存功能开关状态
-def save_function_status(group_id, status):
-    save_switch(group_id, "Example", status)
-
-
-# 处理元事件，用于启动时确保数据目录存在
-async def handle_meta_event(websocket, msg):
-    """处理元事件"""
-    os.makedirs(DATA_DIR, exist_ok=True)
-
-
-# 处理开关状态
-async def toggle_function_status(websocket, group_id, message_id, authorized):
-    if not authorized:
-        await send_group_msg(
-            websocket,
-            group_id,
-            f"[CQ:reply,id={message_id}]❌❌❌你没有权限对Example功能进行操作,请联系管理员。",
-        )
-        return
-
-    if load_function_status(group_id):
-        save_function_status(group_id, False)
-        await send_group_msg(
-            websocket,
-            group_id,
-            f"[CQ:reply,id={message_id}]🚫🚫🚫Example功能已关闭",
-        )
-    else:
-        save_function_status(group_id, True)
-        await send_group_msg(
-            websocket, group_id, f"[CQ:reply,id={message_id}]✅✅✅Example功能已开启"
-        )
-
-
-# 群消息处理函数
-async def handle_group_message(websocket, msg):
-    """处理群消息"""
-    # 确保数据目录存在
-    os.makedirs(DATA_DIR, exist_ok=True)
-    try:
-        user_id = str(msg.get("user_id"))
-        group_id = str(msg.get("group_id"))
-        raw_message = str(msg.get("raw_message"))
-        message_id = str(msg.get("message_id"))
-        authorized = user_id in owner_id
-
-        # 处理开关命令
-        if raw_message == "example":
-            await toggle_function_status(websocket, group_id, message_id, authorized)
-            return
-        # 检查功能是否开启
-        if load_function_status(group_id):
-            # 其他群消息处理逻辑
-            pass
-    except Exception as e:
-        logging.error(f"处理Example群消息失败: {e}")
-        await send_group_msg(
-            websocket,
-            group_id,
-            "处理Example群消息失败，错误信息：" + str(e),
-        )
-        return
-
-
-# 私聊消息处理函数
-async def handle_private_message(websocket, msg):
-    """处理私聊消息"""
-    os.makedirs(DATA_DIR, exist_ok=True)
-    try:
-        user_id = str(msg.get("user_id"))
-        raw_message = str(msg.get("raw_message"))
-        # 私聊消息处理逻辑
-        pass
-    except Exception as e:
-        logging.error(f"处理Example私聊消息失败: {e}")
-        await send_private_msg(
-            websocket,
-            msg.get("user_id"),
-            "处理Example私聊消息失败，错误信息：" + str(e),
-        )
-        return
-
-
-# 群通知处理函数
-async def handle_group_notice(websocket, msg):
-    """处理群通知"""
-    # 确保数据目录存在
-    os.makedirs(DATA_DIR, exist_ok=True)
-    try:
-        user_id = str(msg.get("user_id"))
-        group_id = str(msg.get("group_id"))
-        notice_type = str(msg.get("notice_type"))
-        operator_id = str(msg.get("operator_id", ""))
-
-    except Exception as e:
-        logging.error(f"处理Example群通知失败: {e}")
-        await send_group_msg(
-            websocket,
-            group_id,
-            "处理Example群通知失败，错误信息：" + str(e),
-        )
-        return
-
-
-# 回应事件处理函数
-async def handle_response(websocket, msg):
-    """处理回调事件"""
-    try:
-        echo = msg.get("echo")
-        if echo and echo.startswith("xxx"):
-            # 回调处理逻辑
-            pass
-    except Exception as e:
-        logging.error(f"处理Example回调事件失败: {e}")
-        await send_group_msg(
-            websocket,
-            msg.get("group_id"),
-            f"处理Example回调事件失败，错误信息：{str(e)}",
-        )
-        return
-
-
-# 统一事件处理入口
-async def handle_events(websocket, msg):
-    """统一事件处理入口"""
-    post_type = msg.get("post_type", "response")  # 添加默认值
-    try:
-        # 处理回调事件
-        if msg.get("status") == "ok":
-            await handle_response(websocket, msg)
+            # 处理不同类型的元事件
+            if meta_type == "heartbeat":
+                # 处理心跳事件，可用于定时任务
+                pass
+            elif meta_type == "lifecycle":
+                # 处理生命周期事件
+                sub_type = msg.get("sub_type", "")
+                if sub_type == "connect":
+                    # WebSocket连接成功
+                    pass
+                # 其他生命周期子类型处理
+            # 可以添加更多元事件类型的处理
+        except Exception as e:
+            logging.error(f"[Example]处理元事件失败: {e}")
             return
 
-        post_type = msg.get("post_type")
+    def get_error_type_name(self, post_type):
+        """获取事件类型的中文名称"""
+        try:
+            return {
+                "message": "消息",
+                "notice": "通知",
+                "request": "请求",
+                "meta_event": "元事件",
+            }.get(post_type or "", "未知")
+        except Exception as e:
+            logging.error(f"[Example]获取事件类型名称失败: {e}")
+            return "未知"
 
-        # 处理元事件
-        if post_type == "meta_event":
-            await handle_meta_event(websocket, msg)
+    async def handle_events(self, websocket, msg):
+        """统一事件处理入口
 
-        # 处理消息事件
-        elif post_type == "message":
-            message_type = msg.get("message_type")
-            if message_type == "group":
-                await handle_group_message(websocket, msg)
-            elif message_type == "private":
-                await handle_private_message(websocket, msg)
+        通过组合模式，将不同类型的事件分发到各个专门的处理器
 
-        # 处理通知事件
-        elif post_type == "notice":
-            await handle_group_notice(websocket, msg)
+        Args:
+            websocket: WebSocket连接对象
+            msg: 接收到的消息字典
+        """
+        try:
+            self.websocket = websocket
+            # 将websocket连接传递给各处理器
+            self.message_handler.websocket = self.websocket
+            self.notice_handler.websocket = self.websocket
+            self.request_handler.websocket = self.websocket
+            self.response_handler.websocket = self.websocket
 
-    except Exception as e:
-        error_type = {
-            "message": "消息",
-            "notice": "通知",
-            "request": "请求",
-            "meta_event": "元事件",
-        }.get(post_type, "未知")
+            # 处理回调事件
+            if msg.get("status") == "ok":
+                await self.response_handler.handle(msg)
+                return
 
-        logging.error(f"处理Example{error_type}事件失败: {e}")
+            # 基于事件类型分发到不同的处理器
+            post_type = msg.get("post_type", "")
 
-        # 发送错误提示
-        if post_type == "message":
-            message_type = msg.get("message_type")
-            if message_type == "group":
-                await send_group_msg(
-                    websocket,
-                    msg.get("group_id"),
-                    f"处理Example{error_type}事件失败，错误信息：{str(e)}",
-                )
-            elif message_type == "private":
-                await send_private_msg(
-                    websocket,
-                    msg.get("user_id"),
-                    f"处理Example{error_type}事件失败，错误信息：{str(e)}",
-                )
+            # 处理元事件
+            if post_type == "meta_event":
+                await self.handle_meta_event(msg)
+
+            # 处理消息事件
+            elif post_type == "message":
+                await self.message_handler.handle(msg)
+
+            # 处理通知事件
+            elif post_type == "notice":
+                await self.notice_handler.handle(msg)
+
+            # 处理请求事件
+            elif post_type == "request":
+                await self.request_handler.handle(msg)
+
+        except Exception as e:
+            # 获取基本事件类型用于错误日志
+            post_type = msg.get("post_type", "")
+            error_type = self.get_error_type_name(post_type)
+            logging.error(f"[Example]处理Example{error_type}事件失败: {e}")
+
+            # 尝试发送错误提示
+            try:
+                # 只有在消息类型事件中才发送错误提示
+                if post_type == "message":
+                    message_type = msg.get("message_type", "")
+                    if message_type == "group":
+                        group_id = msg.get("group_id", "")
+                        if group_id:
+                            await send_group_msg(
+                                self.websocket,
+                                group_id,
+                                f"处理Example{error_type}事件失败，错误信息：{str(e)}",
+                            )
+                    elif message_type == "private":
+                        user_id = str(msg.get("user_id", ""))
+                        if user_id:
+                            await send_private_msg(
+                                self.websocket,
+                                user_id,
+                                f"处理Example{error_type}事件失败，错误信息：{str(e)}",
+                            )
+            except Exception as inner_e:
+                # 避免在错误处理中引发新的错误
+                logging.error(f"[Example]发送错误提示失败: {inner_e}")
+
+
+# 创建示例管理器实例 - 单例模式
+Example_manager = ExampleManager()
