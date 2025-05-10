@@ -1,34 +1,64 @@
-# 🤖 W1ndysBot
+# 🤖 W1ndysBotFrame
 
-这是 https://github.com/W1ndys/W1ndysBot 的运行框架，基于 NapCat 和 Python 开发。
+W1ndysBotFrame，一款基于 NapCat 和 Python 开发的机器人程序。
 
 本仓库可能更新不及时，如有需要，请参考 https://github.com/W1ndys/W1ndysBot 的最新更新
 
 ## 📁 项目结构
 
 ```
+app/
+├── api/                    # API 接口模块
+│   ├── user.py            # 用户相关接口
+│   ├── message.py         # 消息处理接口
+│   ├── generate.py        # 生成相关接口
+│   └── group.py           # 群组管理接口
+├── core/                   # 核心功能模块
+│   ├── feishu.py          # 飞书集成
+│   ├── online_detect.py   # 在线检测
+│   └── dingtalk.py        # 钉钉集成
+├── scripts/               # 脚本目录
+│   └── Example/          # 示例脚本
+│       ├── main.py              # 主程序入口
+│       ├── data_manager.py      # 数据管理
+│       ├── message_handler.py   # 消息处理器
+│       ├── group_message_handler.py    # 群消息处理
+│       ├── private_message_handler.py  # 私聊消息处理
+│       ├── notice_handler.py    # 通知处理器
+│       ├── request_handler.py   # 请求处理器
+│       ├── response_handler.py  # 响应处理器
+│       └── README.md           # 说明文档
+├── bot.py                 # 机器人主程序
+├── handler_events.py      # 事件处理器
+├── main.py               # 程序入口
+├── logger.py             # 日志系统
+└── config.py             # 配置文件
+```
 
-W1ndysBot/
-├── app/                    # 主应用目录
-│   ├── data/              # 数据存储目录
-│   │   ├── GroupSwitch/   # 群组开关数据
-│   │   └── Example/       # 示例功能数据
-│   ├── logs/              # 日志文件目录
-│   ├── scripts/           # 功能模块目录
-│   │   └── Example/       # 示例功能模块
-│   │       ├── main.py    # 功能模块主文件
-│   │       └── README.md  # 功能模块说明
-│   ├── api.py            # API 接口封装
-│   ├── bot.py            # 机器人核心
-│   ├── config.py         # 配置文件
-│   ├── dingtalk.py       # 钉钉通知
-│   ├── handler_events.py # 事件处理器
-│   ├── logger.py         # 日志配置
-│   ├── main.py           # 程序入口
-│   ├── switch.py         # 群组开关管理
-│   └── system.py         # 系统功能
-└── README.md             # 项目说明
+## 🔄 系统流程图
 
+```mermaid
+graph TD
+    A[启动程序] --> B[加载配置]
+    B --> C[初始化机器人]
+    C --> D[连接WebSocket]
+    D --> E{事件监听}
+
+    E -->|群消息| F[群消息处理]
+    E -->|私聊消息| G[私聊消息处理]
+    E -->|通知| H[通知处理]
+    E -->|请求| I[请求处理]
+
+    F --> J[消息响应]
+    G --> J
+    H --> K[通知响应]
+    I --> L[请求响应]
+
+    J --> M[日志记录]
+    K --> M
+    L --> M
+
+    M --> E
 ```
 
 ## ✨ 功能说明
@@ -53,33 +83,3 @@ W1ndysBot/
 - `owner_id`: 机器人管理员 QQ 号
 - `ws_url`: WebSocket 连接地址
 - `token`: 认证 token(可选)
-
-## 📜 脚本说明
-
-### 环境配置脚本
-
-- `create_venv_windows.bat`: Windows 下创建 Python 虚拟环境
-- `create_venv_linux.sh`: Linux 下创建 Python 虚拟环境
-- `open_venv_terminal_windows.bat`: Windows 下打开虚拟环境终端
-
-### 运行脚本
-
-- `run_app.sh`: Linux 下后台运行机器人
-- `run_app_in_venv_windows.bat`: Windows 下在虚拟环境中运行机器人
-- `restart_app.sh`: Linux 下重启机器人
-
-### Git 管理脚本
-
-- `git_init_submodules.sh`: 初始化所有子模块
-- `git_add_submodule.sh`: 添加新的子模块
-- `git_remove_submodule.sh`: 删除指定子模块
-- `git_reinstall_submodule.sh`: 重新安装指定子模块
-- `git_update_all.sh`: 更新主仓库和所有子模块
-- `git_update_repo.sh`: 更新主仓库
-- `git_update_submodules.sh`: 更新子模块
-
-### NapCat Docker 相关脚本
-
-- `run_napcat_docker_win.bat`: Windows 下运行 NapCat Docker
-- `linux_run_napcat_docker.sh`: Linux 下运行 NapCat Docker
-- `linux_update_napcat.sh`: Linux 下更新 NapCat Docker
