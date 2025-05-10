@@ -1,8 +1,7 @@
 # app/core/online_detect.py
 
 import logging
-import os
-from config import config
+import config
 from app.api.message import send_private_msg
 from app.core.feishu import feishu
 from app.core.dingtalk import dingtalk
