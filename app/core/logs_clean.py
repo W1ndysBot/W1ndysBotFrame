@@ -24,10 +24,10 @@ async def clean_logs(websocket, msg):
     for file in os.listdir(LOGS_DIR):
         file_path = os.path.join(LOGS_DIR, file)
 
-        # 检查文件是否超过10天
+        # 检查文件是否超过7天
         if (
             os.path.isfile(file_path)
-            and os.path.getmtime(file_path) < current_time - 10 * 24 * 60 * 60
+            and os.path.getmtime(file_path) < current_time - 7 * 24 * 60 * 60
         ):
             try:
                 os.remove(file_path)
