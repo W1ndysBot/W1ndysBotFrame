@@ -2,9 +2,9 @@
 
 import logging
 import config
-from app.api.message import send_private_msg
-from app.core.feishu import feishu
-from app.core.dingtalk import dingtalk
+from api.message import send_private_msg
+from core.feishu import feishu
+from core.dingtalk import dingtalk
 import time
 import asyncio
 

@@ -1,7 +1,7 @@
 # app/scripts/Example/request_handler.py
 
 import logging
-from app.scripts.Example.data_manager import DataManager
+from scripts.Example.data_manager import DataManager
 
 
 class RequestHandler:

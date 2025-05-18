@@ -1,8 +1,8 @@
 # app/scripts/Example/private_message_handler.py
 
 import logging
-from app.api.message import send_private_msg
-from app.scripts.Example.data_manager import DataManager
+from api.message import send_private_msg
+from scripts.Example.data_manager import DataManager
 
 
 class PrivateMessageHandler:

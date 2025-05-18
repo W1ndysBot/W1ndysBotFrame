@@ -1,10 +1,10 @@
 # app/scripts/Example/message_handler.py
 
 import logging
-from app.api.message import send_group_msg, send_private_msg
-from app.scripts.Example.group_message_handler import GroupMessageHandler
-from app.scripts.Example.private_message_handler import PrivateMessageHandler
-from app.scripts.Example.data_manager import DataManager
+from api.message import send_group_msg, send_private_msg
+from scripts.Example.group_message_handler import GroupMessageHandler
+from scripts.Example.private_message_handler import PrivateMessageHandler
+from scripts.Example.data_manager import DataManager
 
 
 class MessageHandler:

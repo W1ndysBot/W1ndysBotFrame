@@ -4,7 +4,7 @@ import os
 import json
 import logging
 
-from app.config import owner_id
+from config import owner_id
 
 
 class DataManager:

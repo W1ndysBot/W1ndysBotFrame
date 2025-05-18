@@ -6,7 +6,7 @@ import asyncio
 from datetime import datetime
 from dotenv import load_dotenv
 from logger import logger
-from bot import bot
+from bot import connect_to_bot
 
 # 加载.env文件中的环境变量
 load_dotenv()
@@ -48,7 +48,7 @@ class Application:
         """运行主程序"""
         while True:
             try:
-                result = await bot.connect()
+                result = await connect_to_bot()
                 if result is None:
                     raise ValueError("连接返回None")
             except Exception as e:

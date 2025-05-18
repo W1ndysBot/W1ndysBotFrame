@@ -1,9 +1,9 @@
 # app/scripts/Example/group_message_handler.py
 
 import logging
-from app.api.message import send_group_msg
-from app.api.generate import *
-from app.scripts.Example.data_manager import DataManager
+from api.message import send_group_msg
+from api.generate import *
+from scripts.Example.data_manager import DataManager
 
 
 class GroupMessageHandler:

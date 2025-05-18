@@ -7,11 +7,10 @@ import asyncio
 
 
 # 核心模块
-from app.core.online_detect import Online_detect_manager
-
+from core.online_detect import Online_detect_manager
 
 # 示例模块
-from app.scripts.Example.main import Example_manager
+from scripts.Example.main import Example_manager
 
 
 class EventHandler:

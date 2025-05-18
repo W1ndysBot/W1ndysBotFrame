@@ -1,20 +1,13 @@
 # app/scripts/Example/main.py
 
 import logging
-import os
-import sys
 
-# 添加项目根目录到sys.path
-sys.path.append(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
-
-from app.api.message import send_group_msg, send_private_msg
-from app.scripts.Example.data_manager import DataManager
-from app.scripts.Example.message_handler import MessageHandler
-from app.scripts.Example.notice_handler import NoticeHandler
-from app.scripts.Example.request_handler import RequestHandler
-from app.scripts.Example.response_handler import ResponseHandler
+from api.message import send_group_msg, send_private_msg
+from scripts.Example.data_manager import DataManager
+from scripts.Example.message_handler import MessageHandler
+from scripts.Example.notice_handler import NoticeHandler
+from scripts.Example.request_handler import RequestHandler
+from scripts.Example.response_handler import ResponseHandler
 
 
 class ExampleManager:
