@@ -1,3 +1,7 @@
+from . import MODULE_NAME
+import logger
+
+
 class MessageHandler:
     """消息处理器"""
 
@@ -11,13 +15,19 @@ class MessageHandler:
         """
         处理群消息
         """
-        pass
+        try:
+            pass
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理群消息失败: {e}")
 
     async def handle_private(self):
         """
         处理私聊消息
         """
-        pass
+        try:
+            pass
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理私聊消息失败: {e}")
 
     async def handle(self):
         if self.message_type == "group":

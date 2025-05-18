@@ -1,4 +1,5 @@
 import logger
+from . import MODULE_NAME
 from .handle_meta_event import MetaEventHandler
 from .handle_message import MessageHandler
 from .handle_notice import NoticeHandler
@@ -43,4 +44,4 @@ async def handle_events(websocket, msg):
 
     except Exception as e:
         # 获取基本事件类型用于错误日志
-        logger.error(f"[Example]处理Example{post_type}事件失败: {e}")
+        logger.error(f"[{MODULE_NAME}]处理{MODULE_NAME}{post_type}事件失败: {e}")

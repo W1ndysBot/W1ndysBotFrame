@@ -1,4 +1,5 @@
 import logger
+from . import MODULE_NAME
 
 
 class MetaEventHandler:
@@ -14,4 +15,4 @@ class MetaEventHandler:
         self.post_type = msg.get("post_type", "")
 
     async def handle(self):
-        logger.info(f"[Example]收到元事件")
+        logger.info(f"[{MODULE_NAME}]收到元事件")

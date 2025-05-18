@@ -1,4 +1,5 @@
 import logger
+from . import MODULE_NAME
 
 
 class NoticeHandler:
@@ -17,4 +18,4 @@ class NoticeHandler:
         # 后面可以根据文档来添加更多属性和函数
 
     async def handle(self):
-        logger.info(f"[Example]收到通知")
+        logger.info(f"[{MODULE_NAME}]收到通知")

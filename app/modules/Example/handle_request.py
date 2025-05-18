@@ -1,4 +1,5 @@
 import logger
+from . import MODULE_NAME
 
 
 class RequestHandler:
@@ -29,7 +30,7 @@ class RequestHandler:
         elif self.sub_type == "add":
             await self.handle_group_add()
         else:
-            logger.error(f"[Example]收到未知群请求类型: {self.sub_type}")
+            logger.error(f"[{MODULE_NAME}]收到未知群请求类型: {self.sub_type}")
 
     async def handle_group_invite(self):
         """
@@ -49,4 +50,4 @@ class RequestHandler:
         elif self.request_type == "group":
             await self.handle_group()
         else:
-            logger.error(f"[Example]收到未知请求类型: {self.request_type}")
+            logger.error(f"[{MODULE_NAME}]收到未知请求类型: {self.request_type}")

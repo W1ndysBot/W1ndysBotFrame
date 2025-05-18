@@ -1,4 +1,5 @@
 import logger
+from . import MODULE_NAME
 
 
 class ResponseHandler:
@@ -11,4 +12,7 @@ class ResponseHandler:
         self.echo = msg.get("echo", {})
 
     async def handle(self):
-        pass
+        try:
+            pass
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理响应失败: {e}")
