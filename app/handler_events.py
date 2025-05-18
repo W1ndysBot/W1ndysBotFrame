@@ -4,7 +4,7 @@
 import json
 import asyncio
 import logger
-
+import shutil
 
 # 核心模块
 from core.online_detect import handle_events as online_detect_handle_events
@@ -27,10 +27,11 @@ class EventHandler:
             msg = json.loads(message)
 
             # 打印WebSocket消息
-            logger.info("=" * 50)
-            logger.info("📩 收到WebSocket消息:")
-            logger.info(msg)
-            logger.info("=" * 50)
+
+            terminal_width = shutil.get_terminal_size().columns
+            logger.info(
+                f"{'-' * terminal_width}\n📩 收到WebSocket消息:\n{msg}\n{'-' * terminal_width}"
+            )
 
             # 并发调用各个模块的事件处理器
             tasks = [handler(websocket, msg) for handler in self.handlers]
