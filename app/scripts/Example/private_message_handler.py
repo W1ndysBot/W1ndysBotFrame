@@ -5,5 +5,5 @@ class PrivateMessageHandler:
         self.websocket = websocket
         self.msg = msg
 
-    async def handle(self, msg):
+    async def handle(self):
         pass

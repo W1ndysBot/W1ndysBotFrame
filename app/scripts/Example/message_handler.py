@@ -1,4 +1,5 @@
-import logger
+from .group_message_handler import GroupMessageHandler
+from .private_message_handler import PrivateMessageHandler
 
 
 class MessageHandler:
@@ -10,5 +11,7 @@ class MessageHandler:
         self.message_type = msg.get("message_type", "")
 
     async def handle(self):
-
-        logger.info(f"[Example]收到消息")
+        if self.message_type == "group":
+            await GroupMessageHandler(self.websocket, self.msg).handle()
+        elif self.message_type == "private":
+            await PrivateMessageHandler(self.websocket, self.msg).handle()
