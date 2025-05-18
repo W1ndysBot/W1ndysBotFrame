@@ -8,7 +8,7 @@ from core.online_detect import handle_events as online_detect_handle_events  # �
 from core.logs_clean import clean_logs  # 日志清理
 
 # 示例模块
-from modules.Example.main import handle_events as example_handle_events
+from modules.example.main import handle_events as example_handle_events
 
 
 class EventHandler:
