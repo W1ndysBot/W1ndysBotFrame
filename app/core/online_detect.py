@@ -1,25 +1,26 @@
 # app/core/online_detect.py
 
-import logging
-import config
+import logger
+from config import OWNER_ID
 from api.message import send_private_msg
-from core.feishu import feishu
-from core.dingtalk import dingtalk
+from .feishu import feishu
 import time
 import asyncio
 
+# 全局变量
+is_online = True  # 初始状态为在线
+last_state_change_time = 0
+last_report_time = 0
+# 状态变化的最小时间间隔(秒)，防止频繁上报
+min_report_interval = 60
+owner_id = OWNER_ID
 
-class OnlineDetectManager:
-    def __init__(self):
-        self.is_online = True  # 初始状态为在线
-        self.last_state_change_time = 0
-        self.last_report_time = 0
-        # 状态变化的最小时间间隔(秒)，防止频繁上报
-        self.min_report_interval = 60
-        self.owner_id = config.owner_id
 
-    async def handle_events(self, websocket, message):
-        """处理心跳事件，检测在线状态"""
+async def handle_events(websocket, message):
+    """处理心跳事件，检测在线状态"""
+    global is_online, last_state_change_time, last_report_time
+
+    try:
         # 处理首次连接事件
         if (
             message.get("post_type") == "meta_event"
@@ -31,17 +32,17 @@ class OnlineDetectManager:
                 time.localtime(message.get("time", int(time.time()))),
             )
             connect_msg = f"W1ndysGroupBot已上线！\n机器人ID: {message.get('self_id')}\n上线时间: {current_time}"
-            logging.info(f"机器人首次连接: {connect_msg}")
+            logger.info(f"机器人首次连接: {connect_msg}")
 
             # 向所有管理员发送私聊消息
             try:
                 tasks = [
                     send_private_msg(websocket, owner, connect_msg)
-                    for owner in self.owner_id
+                    for owner in owner_id
                 ]
                 await asyncio.gather(*tasks)
             except Exception as e:
-                logging.error(f"发送上线通知失败: {e}")
+                logger.error(f"发送上线通知失败: {e}")
             return
 
         # 只处理心跳事件
@@ -57,14 +58,14 @@ class OnlineDetectManager:
 
         # 如果是首次检测或状态发生变化
         current_time = int(time.time())
-        if self.is_online is None or self.is_online != current_online:
+        if is_online is None or is_online != current_online:
             # 检查是否达到最小上报间隔
-            if current_time - self.last_report_time >= self.min_report_interval:
-                self.last_state_change_time = current_time
-                self.last_report_time = current_time
+            if current_time - last_report_time >= min_report_interval:
+                last_state_change_time = current_time
+                last_report_time = current_time
 
                 # 生成通知消息
-                if self.is_online is None:
+                if is_online is None:
                     status_text = "初始化" if current_online else "掉线"
                 else:
                     status_text = "重新上线" if current_online else "掉线"
@@ -78,21 +79,23 @@ class OnlineDetectManager:
                 )
 
                 # 发送通知
-                logging.info(f"机器人状态变更: {status_text}")
+                logger.info(f"机器人状态变更: {status_text}")
                 try:
                     # 发送飞书通知
                     feishu_result = feishu(title, content)
                     if "error" in feishu_result:
-                        logging.error(f"发送飞书通知失败: {feishu_result.get('error')}")
+                        logger.error(f"发送飞书通知失败: {feishu_result.get('error')}")
 
-                    # 发送钉钉通知
-                    dingtalk(title, content)
                 except Exception as e:
-                    logging.error(f"发送通知失败: {e}")
+                    logger.error(f"发送飞书通知失败: {e}")
 
             # 更新状态
-            self.is_online = current_online
-
-
-# 创建全局实例
-Online_detect_manager = OnlineDetectManager()
+            is_online = current_online
+    except KeyError as e:
+        logger.error(f"处理心跳事件时发生键错误: {e}")
+    except TypeError as e:
+        logger.error(f"处理心跳事件时发生类型错误: {e}")
+    except ValueError as e:
+        logger.error(f"处理心跳事件时发生值错误: {e}")
+    except Exception as e:
+        logger.error(f"处理心跳事件时发生未知错误: {e}")

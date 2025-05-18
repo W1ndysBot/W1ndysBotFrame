@@ -14,27 +14,14 @@ load_dotenv()
 
 def verify_environment_variables():
     """验证环境变量是否正确加载"""
-    # 验证阿里云API凭证
-    if not os.environ.get("ALIBABA_CLOUD_ACCESS_KEY_ID") or not os.environ.get(
-        "ALIBABA_CLOUD_ACCESS_KEY_SECRET"
-    ):
-        logger.warning(
-            "警告: 未设置阿里云API凭证，阿里云内容安全检测服务可能无法正常工作"
-        )
-    else:
-        logger.info("阿里云API凭证已设置")
 
     # 验证飞书机器人凭证
     if not os.environ.get("FEISHU_BOT_URL") or not os.environ.get("FEISHU_BOT_SECRET"):
-        logger.warning("警告: 未设置飞书机器人凭证，飞书机器人可能无法正常工作")
+        logger.warning(
+            "警告: 未设置飞书机器人凭证（FEISHU_BOT_URL和FEISHU_BOT_SECRET），飞书机器人可能无法正常工作"
+        )
     else:
         logger.info("飞书机器人凭证已设置")
-
-    # 验证钉钉机器人凭证
-    if not os.environ.get("DD_BOT_URL") or not os.environ.get("DD_BOT_SECRET"):
-        logger.warning("警告: 未设置钉钉机器人凭证，钉钉机器人可能无法正常工作")
-    else:
-        logger.info("钉钉机器人凭证已设置")
 
 
 class Application:

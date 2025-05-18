@@ -1,22 +1,19 @@
 # config.py
 
 # ==================== 配置项 ====================
-# 机器人所有者ID列表
+# 机器人所有者ID列表，必填
 OWNER_ID = ["2769731875"]
 
-# WebSocket连接地址
-WS_URL = "ws://127.0.0.1:3005"
+# 连接到NapCatQQ的WebSocket连接地址，默认使用3001端口
+WS_URL = "ws://127.0.0.1:3001"
 
-# 机器人Token
-TOKEN = "wsws"
+# 连接到NapCatQQ的机器人Token
+TOKEN = ""
 
-# 钉钉机器人配置
-DD_BOT_TOKEN = "dingtalk_token"
-DD_BOT_SECRET = "dingtalk_secret"
+# 飞书机器人URL，选填，掉线时使用
+FEISHU_BOT_URL = ""
+
+# 飞书机器人Secret，选填，掉线时使用
+FEISHU_BOT_SECRET = ""
 
 # ==================== 配置项结束 ====================
-
-# 为了保持向后兼容，保留以下变量名
-owner_id = OWNER_ID
-ws_url = WS_URL
-token = TOKEN
