@@ -1,5 +1,3 @@
-# app/scripts/Example/main.py
-
 import logger
 from .handle_meta_event import MetaEventHandler
 from .handle_message import MessageHandler

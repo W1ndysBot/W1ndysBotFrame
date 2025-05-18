@@ -1,5 +1,3 @@
-# logger.py
-
 import logging
 import colorlog
 import os

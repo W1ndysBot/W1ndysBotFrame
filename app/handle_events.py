@@ -1,6 +1,3 @@
-# handlers/message_handler.py
-
-
 import json
 import asyncio
 import logger
@@ -11,7 +8,7 @@ from core.online_detect import handle_events as online_detect_handle_events  # �
 from core.logs_clean import clean_logs  # 日志清理
 
 # 示例模块
-from scripts.Example.main import handle_events as example_handle_events
+from modules.Example.main import handle_events as example_handle_events
 
 
 class EventHandler:

@@ -1,7 +1,4 @@
-# bot.py
-
 import logging
-import asyncio
 import websockets
 from config import *
 

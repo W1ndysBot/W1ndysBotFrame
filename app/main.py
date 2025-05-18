@@ -1,6 +1,3 @@
-# main.py
-
-
 import os
 import asyncio
 from datetime import datetime
