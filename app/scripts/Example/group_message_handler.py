@@ -32,7 +32,6 @@ class GroupMessageHandler:
             # 开关状态初始为None，表示尚未加载
             self.switch_status = None
 
-            logging.info("[Example]初始化群聊消息处理器成功")
         except Exception as e:
             logging.error(f"[Example]初始化群聊消息处理器失败: {e}")
             raise

@@ -46,6 +46,8 @@ class Application:
 
     async def run(self):
         """运行主程序"""
+        # 打印当前运行根目录
+        logger.info(f"当前运行根目录: {os.getcwd()}")
         while True:
             try:
                 result = await connect_to_bot()
@@ -59,5 +61,6 @@ class Application:
 
 
 if __name__ == "__main__":
+
     app = Application()
     asyncio.run(app.run())
