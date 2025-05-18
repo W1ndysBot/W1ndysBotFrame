@@ -11,9 +11,6 @@ import asyncio
 is_online = True  # 初始状态为在线
 last_state_change_time = 0
 last_report_time = 0
-# 状态变化的最小时间间隔(秒)，防止频繁上报
-min_report_interval = 60
-owner_id = OWNER_ID
 
 
 async def handle_events(websocket, message):
@@ -38,7 +35,7 @@ async def handle_events(websocket, message):
             try:
                 tasks = [
                     send_private_msg(websocket, owner, connect_msg)
-                    for owner in owner_id
+                    for owner in OWNER_ID
                 ]
                 await asyncio.gather(*tasks)
             except Exception as e:
@@ -59,35 +56,33 @@ async def handle_events(websocket, message):
         # 如果是首次检测或状态发生变化
         current_time = int(time.time())
         if is_online is None or is_online != current_online:
-            # 检查是否达到最小上报间隔
-            if current_time - last_report_time >= min_report_interval:
-                last_state_change_time = current_time
-                last_report_time = current_time
+            last_state_change_time = current_time
+            last_report_time = current_time
 
-                # 生成通知消息
-                if is_online is None:
-                    status_text = "初始化" if current_online else "掉线"
-                else:
-                    status_text = "重新上线" if current_online else "掉线"
+            # 生成通知消息
+            if is_online is None:
+                status_text = "初始化" if current_online else "掉线"
+            else:
+                status_text = "重新上线" if current_online else "掉线"
 
-                title = f"机器人状态变更: {status_text}"
-                content = (
-                    f"机器人ID: {message.get('self_id')}\n"
-                    f"当前状态: {'在线' if current_online else '离线'}\n"
-                    f"状态变更时间: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(current_time))}\n"
-                    f"心跳间隔: {message.get('interval', 0)/1000}秒"
-                )
+            title = f"机器人状态变更: {status_text}"
+            content = (
+                f"机器人ID: {message.get('self_id')}\n"
+                f"当前状态: {'在线' if current_online else '离线'}\n"
+                f"状态变更时间: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(current_time))}\n"
+                f"心跳间隔: {message.get('interval', 0)/1000}秒"
+            )
 
-                # 发送通知
-                logger.info(f"机器人状态变更: {status_text}")
-                try:
-                    # 发送飞书通知
-                    feishu_result = feishu(title, content)
-                    if "error" in feishu_result:
-                        logger.error(f"发送飞书通知失败: {feishu_result.get('error')}")
+            # 发送通知
+            logger.info(f"机器人状态变更: {status_text}")
+            try:
+                # 发送飞书通知
+                feishu_result = feishu(title, content)
+                if "error" in feishu_result:
+                    logger.error(f"发送飞书通知失败: {feishu_result.get('error')}")
 
-                except Exception as e:
-                    logger.error(f"发送飞书通知失败: {e}")
+            except Exception as e:
+                logger.error(f"发送飞书通知失败: {e}")
 
             # 更新状态
             is_online = current_online

@@ -27,7 +27,6 @@ class EventHandler:
             msg = json.loads(message)
 
             # 打印WebSocket消息
-
             terminal_width = shutil.get_terminal_size().columns
             logger.info(
                 f"{'-' * terminal_width}\n📩 收到WebSocket消息:\n{msg}\n{'-' * terminal_width}"
