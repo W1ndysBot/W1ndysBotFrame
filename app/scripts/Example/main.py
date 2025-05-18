@@ -10,15 +10,9 @@ from scripts.Example.request_handler import RequestHandler
 from scripts.Example.response_handler import ResponseHandler
 
 
-class ExampleManager:
-    """示例管理类 - 使用组合模式重构
-
-    通过组合不同的处理器，实现模块化设计，包括：
-    - 数据管理器：负责数据存储和功能开关
-    - 消息处理器：负责群消息和私聊消息处理
-    - 通知处理器：负责各类通知事件处理
-    - 请求处理器：负责加好友和加群请求处理
-    - 响应处理器：负责API回调响应处理
+class Main:
+    """
+    主类，负责分发
     """
 
     def __init__(self):
@@ -141,7 +135,3 @@ class ExampleManager:
             except Exception as inner_e:
                 # 避免在错误处理中引发新的错误
                 logging.error(f"[Example]发送错误提示失败: {inner_e}")
-
-
-# 创建示例管理器实例 - 单例模式
-Example_manager = ExampleManager()
