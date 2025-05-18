@@ -7,7 +7,8 @@ import logger
 import shutil
 
 # 核心模块
-from core.online_detect import handle_events as online_detect_handle_events
+from core.online_detect import handle_events as online_detect_handle_events  # 在线监测
+from core.logs_clean import clean_logs  # 日志清理
 
 # 示例模块
 from scripts.Example.main import handle_events as example_handle_events
@@ -17,6 +18,7 @@ class EventHandler:
     def __init__(self):
         # 事件处理器列表
         self.handlers = [
+            clean_logs,  # 日志清理
             online_detect_handle_events,  # 在线监测
             example_handle_events,  # 示例模块
         ]
