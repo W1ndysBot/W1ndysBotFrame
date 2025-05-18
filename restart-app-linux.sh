@@ -9,12 +9,9 @@ if [ -f "app.pid" ]; then
     if ps -p $PID > /dev/null; then
         echo "停止正在运行的应用 (PID: $PID)"
         kill $PID
-        # 等待进程结束
-        sleep 0.5
         if ps -p $PID > /dev/null; then
             echo "应用未能正常停止，强制终止中..."
             kill -9 $PID
-            sleep 0.5
         fi
     else
         echo "应用不在运行状态，但pid文件存在，将清理pid文件"
