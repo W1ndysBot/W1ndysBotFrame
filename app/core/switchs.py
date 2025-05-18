@@ -1,5 +1,5 @@
 """
-数据存储
+开关存储
 每个模块的开关群记录和数据都存储在data/module_name目录下
 开关文件为switch.json，存储结构为：
 {
@@ -14,27 +14,22 @@
 import os
 import json
 import logger
-from . import MODULE_NAME
 
 # 数据根目录
 DATA_ROOT_DIR = "data"
 
 
-# 数据目录
-DATA_DIR = os.path.join(DATA_ROOT_DIR, MODULE_NAME)
-
-# 开关文件路径
-SWITCH_PATH = os.path.join(DATA_DIR, "switch.json")
-
 # 确保数据目录存在
-os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(DATA_ROOT_DIR, exist_ok=True)
 
 
-def load_switch():
+def load_switch(MODULE_NAME):
     """
     加载开关
     """
     try:
+        SWITCH_PATH = os.path.join(DATA_ROOT_DIR, MODULE_NAME, "switch.json")
+        os.makedirs(os.path.dirname(SWITCH_PATH), exist_ok=True)
         if os.path.exists(SWITCH_PATH):
             with open(SWITCH_PATH, "r", encoding="utf-8") as f:
                 return json.load(f)
@@ -45,12 +40,28 @@ def load_switch():
         return {}
 
 
-def save_switch(switch):
+def save_switch(switch, MODULE_NAME):
     """
     保存开关
     """
     try:
+        SWITCH_PATH = os.path.join(DATA_ROOT_DIR, MODULE_NAME, "switch.json")
+        os.makedirs(os.path.dirname(SWITCH_PATH), exist_ok=True)
         with open(SWITCH_PATH, "w", encoding="utf-8") as f:
             json.dump(switch, f, ensure_ascii=False, indent=2)
     except IOError as e:
         logger.error(f"[{MODULE_NAME}]保存开关文件失败: {e}")
+
+
+def toggle_switch(group_id, MODULE_NAME):
+    """
+    切换开关
+    """
+    try:
+        switch = load_switch(MODULE_NAME)
+        switch[group_id] = not switch[group_id]
+        save_switch(switch, MODULE_NAME)
+        return switch[group_id]
+    except Exception as e:
+        logger.error(f"[{MODULE_NAME}]切换开关失败: {e}")
+        return False
