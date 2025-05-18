@@ -1,11 +1,11 @@
 # app/scripts/Example/main.py
 
 import logger
-from .meta_event_handler import MetaEventHandler
-from .message_handler import MessageHandler
-from .notice_handler import NoticeHandler
-from .request_handler import RequestHandler
-from .response_handler import ResponseHandler
+from .handle_meta_event import MetaEventHandler
+from .handle_message import MessageHandler
+from .handle_notice import NoticeHandler
+from .handle_request import RequestHandler
+from .handle_response import ResponseHandler
 
 
 async def handle_events(websocket, msg):
