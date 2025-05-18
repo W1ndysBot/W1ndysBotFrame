@@ -35,7 +35,7 @@ app/
 
 ## 流程图
 
-![流程图](./docs/flow_diagram.png)
+在这里->[流程图](./docs/flow_diagram.md)
 
 ## ✨ 功能说明
 
