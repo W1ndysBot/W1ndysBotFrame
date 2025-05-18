@@ -1,5 +1,7 @@
 # 🤖 W1ndysBotFrame
 
+## 项目正在重构阶段，可能不稳定！！！
+
 W1ndysBotFrame，一款基于 NapCat 和 Python 开发的机器人程序。
 
 本仓库可能更新不及时，如有需要，请参考 https://github.com/W1ndys/W1ndysBot 的最新更新
