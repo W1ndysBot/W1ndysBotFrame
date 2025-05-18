@@ -2,7 +2,7 @@ import logging
 import websockets
 from config import *
 
-from app.handle_events import EventHandler
+from handle_events import EventHandler
 
 
 async def connect_to_bot():
