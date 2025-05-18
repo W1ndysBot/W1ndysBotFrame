@@ -10,7 +10,7 @@ import asyncio
 from core.online_detect import Online_detect_manager
 
 # 示例模块
-from scripts.Example.main import Example_manager
+from scripts.Example.main import handle_events as example_handle_events
 
 
 class EventHandler:
@@ -18,7 +18,7 @@ class EventHandler:
         # 事件处理器列表
         self.handlers = [
             Online_detect_manager.handle_events,  # 在线监测
-            Example_manager.handle_events,  # 示例模块
+            example_handle_events,  # 示例模块
         ]
 
     async def handle_message(self, websocket, message):
