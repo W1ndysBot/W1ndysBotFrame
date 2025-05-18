@@ -1,6 +1,6 @@
 # main.py
 
-import sys
+
 import os
 import asyncio
 from datetime import datetime
