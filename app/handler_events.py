@@ -25,7 +25,13 @@ class EventHandler:
         """处理websocket消息"""
         try:
             msg = json.loads(message)
-            logger.info(f"{'*' * 100}\n收到事件：{msg}\n{'*' * 100}\n\n")
+
+            # 打印WebSocket消息
+            logger.info("=" * 50)
+            logger.info("📩 收到WebSocket消息:")
+            logger.info(msg)
+            logger.info("=" * 50)
+
             # 并发调用各个模块的事件处理器
             tasks = [handler(websocket, msg) for handler in self.handlers]
             await asyncio.gather(*tasks)
