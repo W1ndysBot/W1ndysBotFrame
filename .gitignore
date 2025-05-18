@@ -1,5 +1,5 @@
 # 忽略data文件夹
-# data/
+data/
 
 # 忽略logs文件夹
 logs/
