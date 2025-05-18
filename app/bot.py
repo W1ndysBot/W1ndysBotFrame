@@ -5,9 +5,7 @@ import asyncio
 import websockets
 from config import *
 
-from handler_events import EventHandler
-
-from api.message import send_private_msg
+from app.handle_events import EventHandler
 
 
 async def connect_to_bot():
