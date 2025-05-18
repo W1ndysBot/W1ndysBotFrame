@@ -8,5 +8,5 @@ class NoticeHandler:
         self.websocket = websocket
         self.msg = msg
 
-    async def handle(self, msg):
+    async def handle(self):
         logger.info(f"[Example]收到通知")

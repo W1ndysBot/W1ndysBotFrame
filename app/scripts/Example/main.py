@@ -21,7 +21,7 @@ async def handle_events(websocket, msg):
 
         # 处理回调事件
         if msg.get("status") == "ok":
-            await ResponseHandler(websocket, msg).handle(msg)
+            await ResponseHandler(websocket, msg).handle()
             return
 
         # 基于事件类型分发到不同的处理器
@@ -29,19 +29,19 @@ async def handle_events(websocket, msg):
 
         # 处理元事件
         if post_type == "meta_event":
-            await MetaEventHandler(websocket, msg).handle(msg)
+            await MetaEventHandler(websocket, msg).handle()
 
         # 处理消息事件
         elif post_type == "message":
-            await MessageHandler(websocket, msg).handle(msg)
+            await MessageHandler(websocket, msg).handle()
 
         # 处理通知事件
         elif post_type == "notice":
-            await NoticeHandler(websocket, msg).handle(msg)
+            await NoticeHandler(websocket, msg).handle()
 
         # 处理请求事件
         elif post_type == "request":
-            await RequestHandler(websocket, msg).handle(msg)
+            await RequestHandler(websocket, msg).handle()
 
     except Exception as e:
         # 获取基本事件类型用于错误日志
