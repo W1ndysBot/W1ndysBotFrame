@@ -1,1 +1,1 @@
-MODULE_NAME = "Example"
+MODULE_NAME = "example"

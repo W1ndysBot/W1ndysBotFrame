@@ -8,7 +8,6 @@
         "群号2": False
     }
 }
-
 """
 
 import os
@@ -25,7 +24,7 @@ os.makedirs(DATA_ROOT_DIR, exist_ok=True)
 
 def load_switch(MODULE_NAME):
     """
-    加载开关
+    加载某模块的开关
     """
     try:
         SWITCH_PATH = os.path.join(DATA_ROOT_DIR, MODULE_NAME, "switch.json")
@@ -42,7 +41,7 @@ def load_switch(MODULE_NAME):
 
 def save_switch(switch, MODULE_NAME):
     """
-    保存开关
+    保存某模块的开关
     """
     try:
         SWITCH_PATH = os.path.join(DATA_ROOT_DIR, MODULE_NAME, "switch.json")
@@ -55,7 +54,7 @@ def save_switch(switch, MODULE_NAME):
 
 def toggle_switch(group_id, MODULE_NAME):
     """
-    切换开关
+    切换某模块的开关
     """
     try:
         switch = load_switch(MODULE_NAME)
@@ -65,3 +64,23 @@ def toggle_switch(group_id, MODULE_NAME):
     except Exception as e:
         logger.error(f"[{MODULE_NAME}]切换开关失败: {e}")
         return False
+
+
+def get_group_all_switch(group_id):
+    """
+    获取某群组所有模块的开关
+    返回格式为：
+    {
+        "group_id": {
+            "module_name1": True,
+            "module_name2": False
+        }
+    }
+    """
+    switch = {group_id: {}}
+    # 遍历所有数据目录
+    for module_name in os.listdir(DATA_ROOT_DIR):
+        switch_data = load_switch(module_name)
+        if group_id in switch_data.get("switch", {}):
+            switch[group_id][module_name] = switch_data["switch"][group_id]
+    return switch
