@@ -7,6 +7,8 @@ class ResponseHandler:
     def __init__(self, websocket, msg):
         self.websocket = websocket
         self.msg = msg
+        self.data = msg.get("data", {})
+        self.echo = msg.get("echo", {})
 
     async def handle(self):
-        logger.info(f"[Example]收到响应")
+        pass
