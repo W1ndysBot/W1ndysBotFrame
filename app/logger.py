@@ -8,7 +8,7 @@ from logging.handlers import RotatingFileHandler
 
 
 class Logger:
-    def __init__(self, logs_dir=None, level=logging.INFO):
+    def __init__(self, logs_dir="logs", level=logging.INFO):
         self.root_logger = logging.getLogger()
         self.level = level
 
@@ -40,8 +40,7 @@ class Logger:
         for handler in self.root_logger.handlers:
             handler.flush()
 
-        self.info("初始化日志器")
-        self.info(f"日志文件名: {self.log_filename}")
+        self.info(f"初始化日志器，日志文件名: {self.log_filename}")
 
         return self.log_filename
 

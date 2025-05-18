@@ -26,8 +26,7 @@ def verify_environment_variables():
 
 class Application:
     def __init__(self):
-        # 初始化日志
-        logger.setup()
+
         # 验证环境变量
         verify_environment_variables()
 
