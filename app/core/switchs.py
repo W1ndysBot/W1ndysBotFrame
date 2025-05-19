@@ -2,10 +2,17 @@
 开关存储
 每个模块的开关群记录和数据都存储在data/module_name目录下
 开关文件为switch.json，存储结构为：
+//群聊开关
 {
     "switch": {
         "群号1": True,
         "群号2": False
+    }
+}
+//私聊功能开关
+{
+    "switch": {
+        "私聊功能1": True,
     }
 }
 """
