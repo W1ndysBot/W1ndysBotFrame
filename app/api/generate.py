@@ -6,14 +6,14 @@ def generate_at_message(user_id):
         user_id (int): 要@的用户QQ号，如果为"all"则表示@全体成员
 
     Returns:
-        list: 包含@消息段的列表，格式为:
-        [{"type": "at", "data": {"qq": user_id}}]
+        dict: 包含@消息段的字典，格式为:
+        {"type": "at", "data": {"qq": user_id}}
 
     Note:
         - 在群聊中@全体成员需要管理员权限
         - 私聊中不支持@功能
     """
-    return [{"type": "at", "data": {"qq": user_id}}]
+    return {"type": "at", "data": {"qq": user_id}}
 
 
 def generate_reply_message(message_id):
@@ -24,14 +24,14 @@ def generate_reply_message(message_id):
         message_id (int): 要回复的消息ID
 
     Returns:
-        list: 包含回复消息段的列表，格式为:
-        [{"type": "reply", "data": {"id": message_id}}]
+        dict: 包含回复消息段的字典，格式为:
+        {"type": "reply", "data": {"id": message_id}}
 
     Note:
         - 回复消息会显示被回复消息的内容
         - 支持回复群聊和私聊消息
     """
-    return [{"type": "reply", "data": {"id": message_id}}]
+    return {"type": "reply", "data": {"id": message_id}}
 
 
 def generate_text_message(text):
@@ -42,14 +42,14 @@ def generate_text_message(text):
         text (str): 要发送的文本内容
 
     Returns:
-        list: 包含文本消息段的列表，格式为:
-        [{"type": "text", "data": {"text": text}}]
+        dict: 包含文本消息段的字典，格式为:
+        {"type": "text", "data": {"text": text}}
 
     Note:
         - 支持发送纯文本消息
         - 可以与其他消息类型组合发送
     """
-    return [{"type": "text", "data": {"text": text}}]
+    return {"type": "text", "data": {"text": text}}
 
 
 def generate_face_message(face_id):
@@ -60,14 +60,14 @@ def generate_face_message(face_id):
         face_id (int): QQ表情ID，范围1-221
 
     Returns:
-        list: 包含表情消息段的列表，格式为:
-        [{"type": "face", "data": {"id": face_id}}]
+        dict: 包含表情消息段的字典，格式为:
+        {"type": "face", "data": {"id": face_id}}
 
     Note:
         - 支持发送系统默认表情
         - 表情ID对应关系可参考QQ表情对照表
     """
-    return [{"type": "face", "data": {"id": face_id}}]
+    return {"type": "face", "data": {"id": face_id}}
 
 
 def generate_image_message(file, type="file", cache=True, proxy=True, timeout=None):
@@ -85,8 +85,8 @@ def generate_image_message(file, type="file", cache=True, proxy=True, timeout=No
         timeout (int): 下载文件的超时时间(秒)
 
     Returns:
-        list: 包含图片消息段的列表，格式为:
-        [{
+        dict: 包含图片消息段的字典，格式为:
+        {
             "type": "image",
             "data": {
                 "file": file,
@@ -95,25 +95,23 @@ def generate_image_message(file, type="file", cache=True, proxy=True, timeout=No
                 "proxy": proxy,
                 "timeout": timeout
             }
-        }]
+        }
 
     Note:
         - 支持发送本地图片、网络图片和Base64编码的图片
         - 图片大小限制为10MB
         - 建议使用cache=True提高发送效率
     """
-    return [
-        {
-            "type": "image",
-            "data": {
-                "file": file,
-                "type": type,
-                "cache": cache,
-                "proxy": proxy,
-                "timeout": timeout,
-            },
-        }
-    ]
+    return {
+        "type": "image",
+        "data": {
+            "file": file,
+            "type": type,
+            "cache": cache,
+            "proxy": proxy,
+            "timeout": timeout,
+        },
+    }
 
 
 def generate_record_message(file, magic=False, cache=True, proxy=True, timeout=None):
@@ -128,8 +126,8 @@ def generate_record_message(file, magic=False, cache=True, proxy=True, timeout=N
         timeout (int): 下载文件的超时时间(秒)
 
     Returns:
-        list: 包含语音消息段的列表，格式为:
-        [{
+        dict: 包含语音消息段的字典，格式为:
+        {
             "type": "record",
             "data": {
                 "file": file,
@@ -138,25 +136,23 @@ def generate_record_message(file, magic=False, cache=True, proxy=True, timeout=N
                 "proxy": proxy,
                 "timeout": timeout
             }
-        }]
+        }
 
     Note:
         - 支持发送本地语音、网络语音和Base64编码的语音
         - 语音格式支持silk、amr、mp3等
         - 语音时长限制为60秒
     """
-    return [
-        {
-            "type": "record",
-            "data": {
-                "file": file,
-                "magic": magic,
-                "cache": cache,
-                "proxy": proxy,
-                "timeout": timeout,
-            },
-        }
-    ]
+    return {
+        "type": "record",
+        "data": {
+            "file": file,
+            "magic": magic,
+            "cache": cache,
+            "proxy": proxy,
+            "timeout": timeout,
+        },
+    }
 
 
 def generate_video_message(file, cache=True, proxy=True, timeout=None):
@@ -170,8 +166,8 @@ def generate_video_message(file, cache=True, proxy=True, timeout=None):
         timeout (int): 下载文件的超时时间(秒)
 
     Returns:
-        list: 包含视频消息段的列表，格式为:
-        [{
+        dict: 包含视频消息段的字典，格式为:
+        {
             "type": "video",
             "data": {
                 "file": file,
@@ -179,19 +175,17 @@ def generate_video_message(file, cache=True, proxy=True, timeout=None):
                 "proxy": proxy,
                 "timeout": timeout
             }
-        }]
+        }
 
     Note:
         - 支持发送本地视频和网络视频
         - 视频大小限制为100MB
         - 建议使用cache=True提高发送效率
     """
-    return [
-        {
-            "type": "video",
-            "data": {"file": file, "cache": cache, "proxy": proxy, "timeout": timeout},
-        }
-    ]
+    return {
+        "type": "video",
+        "data": {"file": file, "cache": cache, "proxy": proxy, "timeout": timeout},
+    }
 
 
 def generate_rps_message():
@@ -199,14 +193,14 @@ def generate_rps_message():
     生成猜拳消息
 
     Returns:
-        list: 包含猜拳消息段的列表，格式为:
-        [{"type": "rps", "data": {}}]
+        dict: 包含猜拳消息段的字典，格式为:
+        {"type": "rps", "data": {}}
 
     Note:
         - 发送后会随机生成剪刀、石头、布中的一个
         - 仅支持在群聊中使用
     """
-    return [{"type": "rps", "data": {}}]
+    return {"type": "rps", "data": {}}
 
 
 def generate_dice_message():
@@ -214,14 +208,14 @@ def generate_dice_message():
     生成骰子消息
 
     Returns:
-        list: 包含骰子消息段的列表，格式为:
-        [{"type": "dice", "data": {}}]
+        dict: 包含骰子消息段的字典，格式为:
+        {"type": "dice", "data": {}}
 
     Note:
         - 发送后会随机生成1-6中的一个数字
         - 仅支持在群聊中使用
     """
-    return [{"type": "dice", "data": {}}]
+    return {"type": "dice", "data": {}}
 
 
 def generate_poke_message(user_id):
@@ -232,14 +226,14 @@ def generate_poke_message(user_id):
         user_id (int): 要戳的用户QQ号
 
     Returns:
-        list: 包含戳一戳消息段的列表，格式为:
-        [{"type": "poke", "data": {"qq": user_id}}]
+        dict: 包含戳一戳消息段的字典，格式为:
+        {"type": "poke", "data": {"qq": user_id}}
 
     Note:
         - 支持在群聊和私聊中使用
         - 每天对同一用户有次数限制
     """
-    return [{"type": "poke", "data": {"qq": user_id}}]
+    return {"type": "poke", "data": {"qq": user_id}}
 
 
 def generate_share_message(url, title, content="", image=""):
@@ -253,8 +247,8 @@ def generate_share_message(url, title, content="", image=""):
         image (str, optional): 分享的图片URL
 
     Returns:
-        list: 包含链接分享消息段的列表，格式为:
-        [{
+        dict: 包含链接分享消息段的字典，格式为:
+        {
             "type": "share",
             "data": {
                 "url": url,
@@ -262,16 +256,14 @@ def generate_share_message(url, title, content="", image=""):
                 "content": content,
                 "image": image
             }
-        }]
+        }
 
     Note:
         - 支持分享网页链接
         - 会自动抓取网页的标题和缩略图
         - 可以自定义标题、简介和图片
     """
-    return [
-        {
-            "type": "share",
-            "data": {"url": url, "title": title, "content": content, "image": image},
-        }
-    ]
+    return {
+        "type": "share",
+        "data": {"url": url, "title": title, "content": content, "image": image},
+    }

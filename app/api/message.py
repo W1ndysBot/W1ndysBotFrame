@@ -6,52 +6,44 @@ import logger
 # 使用cq码发送群消息
 async def send_group_msg_with_cq(websocket, group_id, content):
     """
-    发送群消息，使用旧的消息格式
+    发送群消息，使用旧的消息格式（cq码）
 
     https://napcat.apifox.cn/226799128e0
     """
     try:
-        # 使用更短的随机字符串
-        # random_str = str(uuid.uuid4())[:8]
-        # content = f"{content}\n\n随机ID: {random_str}"
         message = {
             "action": "send_group_msg",
             "params": {"group_id": group_id, "message": content},
             "echo": f"send_group_msg_{content}",
         }
         await websocket.send(json.dumps(message))
-        logger.info(f"[API]已发送群消息到群 {group_id}")
-        await asyncio.sleep(0.5)
+        logger.info(f"[API]已执行发送群消息到群 {group_id}")
     except Exception as e:
-        logger.error(f"[API]发送群消息失败: {e}")
+        logger.error(f"[API]执行发送群消息失败: {e}")
 
 
 # 使用cq码发送私聊消息
 async def send_private_msg_with_cq(websocket, user_id, content):
     """
-    发送私聊消息，使用旧的消息格式
+    发送私聊消息，使用旧的消息格式（cq码）
 
     https://napcat.apifox.cn/226799128e0
     """
     try:
-        # 使用更短的随机字符串
-        # random_str = str(uuid.uuid4())[:8]
-        # content = f"{content}\n\n随机ID: {random_str}"
         message = {
             "action": "send_private_msg",
             "params": {"user_id": user_id, "message": content},
             "echo": "send_private_msg",
         }
         await websocket.send(json.dumps(message))
-        logger.info(f"[API]已发送消息到用户 {user_id}")
-        await asyncio.sleep(0.5)
+        logger.info(f"[API]已执行发送消息到用户 {user_id}")
     except Exception as e:
-        logger.error(f"[API]发送私聊消息失败: {e}")
+        logger.error(f"[API]执行发送消息失败: {e}")
 
 
 async def send_group_msg(websocket, group_id, message):
     """
-    发送群聊消息，使用新的消息格式
+    发送群聊消息，使用新的消息格式（消息段）
     {
         "type": "text",
         "data": {"text": "消息内容"}
@@ -76,13 +68,14 @@ async def send_group_msg(websocket, group_id, message):
             "echo": f"send_group_msg_{group_id}",
         }
         await websocket.send(json.dumps(message_data))
+        logger.info(f"[API]已执行发送群聊消息到群 {group_id}")
     except Exception as e:
-        logger.error(f"[API]发送群聊消息失败: {e}")
+        logger.error(f"[API]执行发送群聊消息失败: {e}")
 
 
 async def send_private_msg(websocket, user_id, message):
     """
-    发送私聊消息，使用新的消息格式
+    发送私聊消息，使用新的消息格式（消息段）
     {
         "type": "text",
         "data": {"text": "消息内容"}
@@ -103,8 +96,9 @@ async def send_private_msg(websocket, user_id, message):
             "params": {"user_id": user_id, "message": message},
         }
         await websocket.send(json.dumps(message_data))
+        logger.info(f"[API]已执行发送私聊消息到用户 {user_id}")
     except Exception as e:
-        logger.error(f"[API]发送私聊消息失败: {e}")
+        logger.error(f"[API]执行发送私聊消息失败: {e}")
 
 
 async def mark_group_msg_as_read(websocket, group_id):
@@ -114,8 +108,9 @@ async def mark_group_msg_as_read(websocket, group_id):
     try:
         message = {"action": "mark_group_msg_as_read", "params": {"group_id": group_id}}
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行设置群聊消息已读")
     except Exception as e:
-        logger.error(f"[API]设置群聊消息已读失败: {e}")
+        logger.error(f"[API]执行设置群聊消息已读失败: {e}")
 
 
 async def mark_private_msg_as_read(websocket, user_id):
@@ -125,8 +120,9 @@ async def mark_private_msg_as_read(websocket, user_id):
     try:
         message = {"action": "mark_private_msg_as_read", "params": {"user_id": user_id}}
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行设置私聊消息已读")
     except Exception as e:
-        logger.error(f"[API]设置私聊消息已读失败: {e}")
+        logger.error(f"[API]执行设置私聊消息已读失败: {e}")
 
 
 async def _mark_all_as_read(websocket):
@@ -136,8 +132,9 @@ async def _mark_all_as_read(websocket):
     try:
         message = {"action": "_mark_all_as_read"}
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行设置所有消息已读")
     except Exception as e:
-        logger.error(f"[API]设置所有消息已读失败: {e}")
+        logger.error(f"[API]执行设置所有消息已读失败: {e}")
 
 
 async def delete_msg(websocket, message_id):
@@ -147,8 +144,9 @@ async def delete_msg(websocket, message_id):
     try:
         message = {"action": "delete_msg", "params": {"message_id": message_id}}
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行撤回消息：{message_id}")
     except Exception as e:
-        logger.error(f"[API]撤回消息失败: {e}")
+        logger.error(f"[API]执行撤回消息失败: {e}")
 
 
 async def get_msg(websocket, message_id):
@@ -158,8 +156,9 @@ async def get_msg(websocket, message_id):
     try:
         message = {"action": "get_msg", "params": {"message_id": message_id}}
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行获取消息详情")
     except Exception as e:
-        logger.error(f"[API]获取消息详情失败: {e}")
+        logger.error(f"[API]执行获取消息详情失败: {e}")
 
 
 async def get_image(websocket, file_id):
@@ -169,8 +168,9 @@ async def get_image(websocket, file_id):
     try:
         message = {"action": "get_image", "params": {"file_id": file_id}}
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行获取图片消息详情")
     except Exception as e:
-        logger.error(f"[API]获取图片消息详情失败: {e}")
+        logger.error(f"[API]执行获取图片消息详情失败: {e}")
 
 
 async def get_record(websocket, file, out_format):
@@ -183,8 +183,9 @@ async def get_record(websocket, file, out_format):
             "params": {"file": file, "out_format": out_format},
         }
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行获取语音消息详情")
     except Exception as e:
-        logger.error(f"[API]获取语音消息详情失败: {e}")
+        logger.error(f"[API]执行获取语音消息详情失败: {e}")
 
 
 async def get_file(websocket, file_id):
@@ -194,8 +195,9 @@ async def get_file(websocket, file_id):
     try:
         message = {"action": "get_file", "params": {"file_id": file_id}}
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行获取文件消息")
     except Exception as e:
-        logger.error(f"[API]获取文件消息失败: {e}")
+        logger.error(f"[API]执行获取文件消息失败: {e}")
 
 
 async def get_group_msg_history(
@@ -216,8 +218,9 @@ async def get_group_msg_history(
             "echo": f"get_group_msg_history_{group_id}_{user_id}_{note}",
         }
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行获取群历史消息")
     except Exception as e:
-        logger.error(f"[API]获取群历史消息失败: {e}")
+        logger.error(f"[API]执行获取群历史消息失败: {e}")
 
 
 async def set_msg_emoji_like(websocket, message_id, emoji_id, set):
@@ -230,8 +233,9 @@ async def set_msg_emoji_like(websocket, message_id, emoji_id, set):
             "params": {"message_id": message_id, "emoji_id": emoji_id, "set": set},
         }
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行设置消息表情点赞")
     except Exception as e:
-        logger.error(f"[API]设置消息表情点赞失败: {e}")
+        logger.error(f"[API]执行设置消息表情点赞失败: {e}")
 
 
 async def get_friend_msg_history(
@@ -251,8 +255,9 @@ async def get_friend_msg_history(
             },
         }
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行获取好友历史消息")
     except Exception as e:
-        logger.error(f"[API]获取好友历史消息失败: {e}")
+        logger.error(f"[API]执行获取好友历史消息失败: {e}")
 
 
 async def get_recent_contact(websocket, count):
@@ -262,8 +267,9 @@ async def get_recent_contact(websocket, count):
     try:
         message = {"action": "get_recent_contact", "params": {"count": count}}
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行获取最近消息列表")
     except Exception as e:
-        logger.error(f"[API]获取最近消息列表失败: {e}")
+        logger.error(f"[API]执行获取最近消息列表失败: {e}")
 
 
 async def fetch_emoji_like(websocket, message_id, emoji_id, emoji_type):
@@ -283,8 +289,9 @@ async def fetch_emoji_like(websocket, message_id, emoji_id, emoji_type):
             },
         }
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行获取消息表情点赞详情")
     except Exception as e:
-        logger.error(f"[API]获取消息表情点赞失败: {e}")
+        logger.error(f"[API]执行获取消息表情点赞详情失败: {e}")
 
 
 async def get_forward_msg(websocket, message_id, note=""):
@@ -298,8 +305,9 @@ async def get_forward_msg(websocket, message_id, note=""):
             "echo": f"get_forward_msg_{note}",
         }
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行获取合并转发消息")
     except Exception as e:
-        logger.error(f"[API]获取合并转发消息失败: {e}")
+        logger.error(f"[API]执行获取合并转发消息失败: {e}")
 
 
 async def send_forward_msg(websocket, user_id=None, group_id=None, message=None):
@@ -321,13 +329,15 @@ async def send_forward_msg(websocket, user_id=None, group_id=None, message=None)
     try:
         # 参数校验
         if user_id is None and group_id is None:
-            logger.error("[API]发送合并转发消息失败: 必须提供user_id或group_id其中之一")
+            logger.error(
+                "[API]执行发送合并转发消息失败: 必须提供user_id或group_id其中之一"
+            )
 
         if user_id is not None and group_id is not None:
-            logger.error("[API]发送合并转发消息失败: user_id和group_id不能同时提供")
+            logger.error("[API]执行发送合并转发消息失败: user_id和group_id不能同时提供")
 
         if not message:
-            logger.error("[API]发送合并转发消息失败: message不能为空")
+            logger.error("[API]执行发送合并转发消息失败: message不能为空")
 
         # 构建请求参数
         params = {"message": message}
@@ -341,9 +351,10 @@ async def send_forward_msg(websocket, user_id=None, group_id=None, message=None)
 
         # 发送请求
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行发送合并转发消息")
 
     except Exception as e:
-        logger.error(f"[API]发送合并转发消息失败: {e}")
+        logger.error(f"[API]执行发送合并转发消息失败: {e}")
 
 
 async def send_poke(websocket, user_id, group_id=None):
@@ -360,7 +371,7 @@ async def send_poke(websocket, user_id, group_id=None):
     """
     try:
         if not user_id:
-            logger.error("[API]发送戳一戳失败: user_id不能为空")
+            logger.error("[API]执行发送戳一戳失败: user_id不能为空")
 
         # 构建参数
         params = {"user_id": user_id}
@@ -369,5 +380,6 @@ async def send_poke(websocket, user_id, group_id=None):
 
         message = {"action": "send_poke", "params": params}
         await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行发送戳一戳")
     except Exception as e:
-        logger.error(f"[API]发送戳一戳失败: {e}")
+        logger.error(f"[API]执行发送戳一戳失败: {e}")
