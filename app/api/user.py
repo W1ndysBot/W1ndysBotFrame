@@ -151,6 +151,10 @@ async def create_collection(websocket, raw_data, brief):
 async def set_friend_add_request(websocket, flag, approve, remark=""):
     """
     处理好友请求
+    参数:
+        flag (string): 请求id，必需
+        approve (boolean): 是否同意，必需
+        remark (string): 好友备注，必需
     """
     try:
         message = {
