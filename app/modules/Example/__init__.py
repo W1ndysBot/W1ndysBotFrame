@@ -3,6 +3,9 @@ import os
 # 模块名称
 MODULE_NAME = "example"
 
+# 模块描述
+MODULE_DESCRIPTION = "示例模块"
+
 # 数据目录
 DATA_DIR = os.path.join("data", MODULE_NAME)
 os.makedirs(DATA_DIR, exist_ok=True)
