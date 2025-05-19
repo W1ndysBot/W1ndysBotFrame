@@ -18,4 +18,4 @@ class NoticeHandler:
         # 后面可以根据文档来添加更多属性和函数
 
     async def handle(self):
-        logger.info(f"[{MODULE_NAME}]收到通知")
+        pass
