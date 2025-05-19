@@ -1,5 +1,8 @@
 from . import *
+from core.auth import is_owner, is_group_admin
 import logger
+from api.message import send_group_msg, send_private_msg
+from api.generate import generate_reply_message, generate_text_message
 
 
 class MessageHandler:
@@ -27,7 +30,35 @@ class MessageHandler:
             self.card = self.sender.get("card", "")  # 群名片
             self.role = self.sender.get("role", "")  # 群身份
 
-            
+            if self.raw_message.lower() == MODULE_NAME.lower():
+                switch_status = toggle_group_switch(self.group_id, MODULE_NAME)
+                if switch_status:
+                    reply_message = generate_reply_message(self.message_id)
+                    text_message = generate_text_message(
+                        f"[{MODULE_NAME}]群聊开关已切换为【{switch_status}】"
+                    )
+                    await send_group_msg(
+                        self.websocket,
+                        self.group_id,
+                        [reply_message, text_message],
+                    )
+                    return
+
+            # 如果没开启群聊开关，则不处理
+            if not load_switch(MODULE_NAME)["group"][self.group_id]:
+                return
+
+            # 测试消息
+            if self.raw_message.lower() in ["测试", "test"]:
+                reply_message = generate_reply_message(self.message_id)
+                text_message = generate_text_message(f"[{MODULE_NAME}]测试成功")
+                await send_group_msg(
+                    self.websocket,
+                    self.group_id,
+                    [reply_message, text_message],
+                )
+                return
+
         except Exception as e:
             logger.error(f"[{MODULE_NAME}]处理群消息失败: {e}")
 
@@ -42,6 +73,35 @@ class MessageHandler:
             self.raw_message = self.msg.get("raw_message", "")  # 原始消息
             self.sender = self.msg.get("sender", {})  # 发送者信息
             self.nickname = self.sender.get("nickname", "")  # 昵称
+
+            if self.raw_message.lower() == MODULE_NAME.lower():
+                switch_status = toggle_private_switch(MODULE_NAME)
+                if switch_status:
+                    reply_message = generate_reply_message(self.message_id)
+                    text_message = generate_text_message(
+                        f"[{MODULE_NAME}]私聊开关已切换为【{switch_status}】"
+                    )
+                    await send_private_msg(
+                        self.websocket,
+                        self.user_id,
+                        [reply_message, text_message],
+                    )
+                    return
+
+            # 如果没开启私聊开关，则不处理
+            if not load_switch(MODULE_NAME)["private"]:
+                return
+
+            # 测试消息
+            if self.raw_message.lower() in ["测试", "test"]:
+                reply_message = generate_reply_message(self.message_id)
+                text_message = generate_text_message(f"[{MODULE_NAME}]测试成功")
+                await send_private_msg(
+                    self.websocket,
+                    self.user_id,
+                    [reply_message, text_message],
+                )
+                return
 
         except Exception as e:
             logger.error(f"[{MODULE_NAME}]处理私聊消息失败: {e}")
