@@ -32,17 +32,17 @@ class MessageHandler:
 
             if self.raw_message.lower() == MODULE_NAME.lower():
                 switch_status = toggle_group_switch(self.group_id, MODULE_NAME)
-                if switch_status:
-                    reply_message = generate_reply_message(self.message_id)
-                    text_message = generate_text_message(
-                        f"[{MODULE_NAME}]群聊开关已切换为【{switch_status}】"
-                    )
-                    await send_group_msg(
-                        self.websocket,
-                        self.group_id,
-                        [reply_message, text_message],
-                    )
-                    return
+                switch_status = "开启" if switch_status else "关闭"
+                reply_message = generate_reply_message(self.message_id)
+                text_message = generate_text_message(
+                    f"[{MODULE_NAME}]群聊开关已切换为【{switch_status}】"
+                )
+                await send_group_msg(
+                    self.websocket,
+                    self.group_id,
+                    [reply_message, text_message],
+                )
+                return
 
             # 如果没开启群聊开关，则不处理
             if not load_switch(MODULE_NAME)["group"].get(self.group_id, False):
