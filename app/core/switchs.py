@@ -73,7 +73,7 @@ def toggle_switch(group_id, MODULE_NAME):
         return False
 
 
-def get_group_all_switch(group_id):
+def load_group_all_switch(group_id):
     """
     获取某群组所有模块的开关
     返回格式为：
