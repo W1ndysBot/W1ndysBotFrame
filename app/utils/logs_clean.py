@@ -11,7 +11,7 @@ import logger
 LOGS_DIR = "logs"
 
 # 天数
-DAYS = 1
+DAYS = 7
 
 
 async def clean_logs(websocket, msg):
@@ -27,7 +27,6 @@ async def clean_logs(websocket, msg):
     # 遍历日志目录
     for file in os.listdir(LOGS_DIR):
         file_path = os.path.join(LOGS_DIR, file)
-
         # 检查文件是否超过指定天数
         if (
             os.path.isfile(file_path)
@@ -44,5 +43,7 @@ async def clean_logs(websocket, msg):
     # 发送删除的文件列表
     if deleted_files:
         await send_private_msg(
-            websocket, OWNER_ID, f"已删除过期日志文件: {', '.join(deleted_files)}"
+            websocket,
+            OWNER_ID,
+            f"已删除过期日志文件: \n{'\n'.join(deleted_files)}",
         )
