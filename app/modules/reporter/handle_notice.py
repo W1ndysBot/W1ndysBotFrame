@@ -1,6 +1,6 @@
 from . import *
 import logger
-
+from datetime import datetime
 
 class NoticeHandler:
     """
@@ -14,6 +14,9 @@ class NoticeHandler:
         self.websocket = websocket
         self.msg = msg
         self.time = msg.get("time", "")
+        self.formatted_time = datetime.fromtimestamp(self.time).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )  # 格式化时间
         self.notice_type = msg.get("notice_type", "")
         # 后面可以根据文档来添加更多属性和函数
 

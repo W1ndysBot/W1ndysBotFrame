@@ -3,7 +3,7 @@ import logger
 from core.auth import is_owner, is_group_admin
 from api.message import send_group_msg
 from api.generate import generate_reply_message, generate_text_message
-
+from datetime import datetime
 
 class GroupMessageHandler:
     """群消息处理器"""
@@ -12,6 +12,9 @@ class GroupMessageHandler:
         self.websocket = websocket
         self.msg = msg
         self.time = msg.get("time", "")
+        self.formatted_time = datetime.fromtimestamp(self.time).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )  # 格式化时间
         self.sub_type = msg.get("sub_type", "")  # 子类型，只有normal
         self.group_id = str(msg.get("group_id", ""))  # 群号
         self.message_id = str(msg.get("message_id", ""))  # 消息ID

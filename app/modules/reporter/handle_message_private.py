@@ -1,10 +1,12 @@
 from . import *
 import logger
 from core.auth import is_owner
+from config import OWNER_ID
 from api.message import send_private_msg
 from api.user import set_friend_add_request
 from api.generate import generate_reply_message, generate_text_message
 import re
+from datetime import datetime
 
 
 class PrivateMessageHandler:
@@ -14,6 +16,9 @@ class PrivateMessageHandler:
         self.websocket = websocket
         self.msg = msg
         self.time = msg.get("time", "")
+        self.formatted_time = datetime.fromtimestamp(self.time).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )  # 格式化时间
         self.sub_type = msg.get("sub_type", "")  # 子类型,friend/group
         self.user_id = str(msg.get("user_id", ""))  # 发送者QQ号
         self.message_id = str(msg.get("message_id", ""))  # 消息ID
@@ -46,24 +51,36 @@ class PrivateMessageHandler:
                 return
 
             # 鉴权
-            if not is_owner(self.user_id):
-                return
-
-            # 处理好友请求
-            # 格式: 同意/拒绝好友请求+请求ID
-            if re.match(r"^(同意|拒绝)好友请求\s*\d+$", self.raw_message):
-                # 提取行为和请求ID
-                parts = self.raw_message.split(" ")
-                action = parts[0]
-                flag = parts[1]
-                logger.info(f"[{MODULE_NAME}]处理好友请求: {action} {flag}")
+            if is_owner(self.user_id):
                 # 处理好友请求
-                approve = action == "同意好友请求"
-                await set_friend_add_request(self.websocket, flag, approve)
-                reply_message = generate_reply_message(self.message_id)
-                text_message = generate_text_message(f"[{MODULE_NAME}]已{action}")
+                # 格式: 同意/拒绝好友请求+请求ID
+                if re.match(r"^(同意|拒绝)好友请求\s*\d+$", self.raw_message):
+                    # 提取行为和请求ID
+                    parts = self.raw_message.split(" ")
+                    action = parts[0]
+                    flag = parts[1]
+                    logger.info(f"[{MODULE_NAME}]处理好友请求: {action} {flag}")
+                    # 处理好友请求
+                    approve = action == "同意好友请求"
+                    await set_friend_add_request(self.websocket, flag, approve)
+                    reply_message = generate_reply_message(self.message_id)
+                    text_message = generate_text_message(f"[{MODULE_NAME}]已{action}")
+                    await send_private_msg(
+                        self.websocket, self.user_id, [reply_message, text_message]
+                    )
+                    return
+
+            # 普通消息转发给owner
+            else:
+                message = f"[{MODULE_NAME}]收到私聊消息\n"
+                message += f"用户ID: {self.user_id}\n"
+                message += f"消息内容: {self.raw_message}\n"
+                message += f"发送时间: {self.formatted_time}"
+                message = generate_text_message(message)
                 await send_private_msg(
-                    self.websocket, self.user_id, [reply_message, text_message]
+                    self.websocket,
+                    OWNER_ID,
+                    [message],
                 )
                 return
 

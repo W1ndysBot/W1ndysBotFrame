@@ -1,6 +1,6 @@
 from . import *
 import logger
-
+from datetime import datetime
 
 class MetaEventHandler:
     """
@@ -12,6 +12,9 @@ class MetaEventHandler:
         self.websocket = websocket
         self.msg = msg
         self.time = msg.get("time", "")
+        self.formatted_time = datetime.fromtimestamp(self.time).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )  # 格式化时间
         self.post_type = msg.get("post_type", "")
 
     async def handle(self):

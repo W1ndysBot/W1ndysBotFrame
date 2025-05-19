@@ -3,7 +3,7 @@ import logger
 from api.generate import generate_text_message
 from api.message import send_private_msg
 from config import OWNER_ID
-
+from datetime import datetime
 
 class RequestHandler:
     """请求处理器"""
@@ -12,6 +12,9 @@ class RequestHandler:
         self.websocket = websocket
         self.msg = msg
         self.time = msg.get("time", "")
+        self.formatted_time = datetime.fromtimestamp(self.time).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )  # 格式化时间
         self.request_type = msg.get("request_type", "")
         self.user_id = self.msg.get("user_id", "")
         self.comment = self.msg.get("comment", "")

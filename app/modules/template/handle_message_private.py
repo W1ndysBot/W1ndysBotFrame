@@ -3,6 +3,7 @@ import logger
 from core.auth import is_owner
 from api.message import send_private_msg
 from api.generate import generate_reply_message, generate_text_message
+from datetime import datetime
 
 
 class PrivateMessageHandler:
@@ -12,6 +13,9 @@ class PrivateMessageHandler:
         self.websocket = websocket
         self.msg = msg
         self.time = msg.get("time", "")
+        self.formatted_time = datetime.fromtimestamp(self.time).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )  # 格式化时间
         self.sub_type = msg.get("sub_type", "")  # 子类型,friend/group
         self.user_id = str(msg.get("user_id", ""))  # 发送者QQ号
         self.message_id = str(msg.get("message_id", ""))  # 消息ID
