@@ -1,5 +1,6 @@
+from . import MODULE_NAME, DATA_DIR, SWITCH_FILE
+
 import logger
-from . import MODULE_NAME
 
 
 class ResponseHandler:

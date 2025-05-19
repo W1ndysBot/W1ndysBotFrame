@@ -1,4 +1,5 @@
-from . import MODULE_NAME
+from . import MODULE_NAME, DATA_DIR, SWITCH_FILE
+
 import logger
 
 
