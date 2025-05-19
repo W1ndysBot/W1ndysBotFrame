@@ -6,8 +6,12 @@ import os
 import time
 from api.message import send_private_msg
 from config import OWNER_ID
+import logger
 
 LOGS_DIR = "logs"
+
+# 天数
+DAYS = 1
 
 
 async def clean_logs(websocket, msg):
@@ -24,16 +28,17 @@ async def clean_logs(websocket, msg):
     for file in os.listdir(LOGS_DIR):
         file_path = os.path.join(LOGS_DIR, file)
 
-        # 检查文件是否超过7天
+        # 检查文件是否超过指定天数
         if (
             os.path.isfile(file_path)
-            and os.path.getmtime(file_path) < current_time - 7 * 24 * 60 * 60
+            and os.path.getmtime(file_path) < current_time - DAYS * 24 * 60 * 60
         ):
             try:
                 os.remove(file_path)
                 deleted_files.append(file_path)
+                logger.info(f"已删除过期日志文件: {file_path}")
             except Exception as e:
-                print(f"删除日志文件失败: {e}")
+                logger.error(f"删除日志文件失败: {e}")
                 await send_private_msg(websocket, OWNER_ID, f"删除日志文件失败: {e}")
 
     # 发送删除的文件列表

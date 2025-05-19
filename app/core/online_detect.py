@@ -3,7 +3,7 @@
 import logger
 from config import OWNER_ID
 from api.message import send_private_msg
-from .feishu import feishu
+from utils.feishu import feishu
 import time
 import asyncio
 

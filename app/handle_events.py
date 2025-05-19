@@ -3,9 +3,11 @@ import asyncio
 import logger
 import shutil
 
+# 工具模块
+from utils.logs_clean import clean_logs  # 日志清理
+
 # 核心模块
 from core.online_detect import handle_events as online_detect_handle_events  # 在线监测
-from core.logs_clean import clean_logs  # 日志清理
 
 # 模板模块
 from modules.template.main import handle_events as template_handle_events
@@ -16,9 +18,14 @@ class EventHandler:
 
         # 事件处理器列表
         self.handlers = [
+            # 底层模块
+            # ----------------------------------------------------
             clean_logs,  # 日志清理
             online_detect_handle_events,  # 在线监测
+            # ----------------------------------------------------
+            # 功能模块
             template_handle_events,  # 模板模块
+            # ----------------------------------------------------
             # 在这里注册新的模块
         ]
 

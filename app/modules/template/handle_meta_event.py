@@ -15,4 +15,4 @@ class MetaEventHandler:
         self.post_type = msg.get("post_type", "")
 
     async def handle(self):
-        logger.info(f"[{MODULE_NAME}]收到元事件")
+        pass
