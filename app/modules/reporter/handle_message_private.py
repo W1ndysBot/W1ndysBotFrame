@@ -50,17 +50,18 @@ class PrivateMessageHandler:
                 return
 
             # 处理好友请求
-            # 格式: 同意/拒绝+请求ID
-            if re.match(r"^(同意|拒绝)\s+\d+$", self.raw_message):
+            # 格式: 同意/拒绝好友请求+请求ID
+            if re.match(r"^(同意|拒绝)好友请求\s*\d+$", self.raw_message):
                 # 提取行为和请求ID
                 parts = self.raw_message.split(" ")
                 action = parts[0]
                 flag = parts[1]
+                logger.info(f"[{MODULE_NAME}]处理好友请求: {action} {flag}")
                 # 处理好友请求
-                approve = action == "同意"
+                approve = action == "同意好友请求"
                 await set_friend_add_request(self.websocket, flag, approve)
                 reply_message = generate_reply_message(self.message_id)
-                text_message = generate_text_message(f"[{MODULE_NAME}]已处理好友请求")
+                text_message = generate_text_message(f"[{MODULE_NAME}]已{action}")
                 await send_private_msg(
                     self.websocket, self.user_id, [reply_message, text_message]
                 )

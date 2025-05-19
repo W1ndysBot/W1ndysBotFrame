@@ -12,6 +12,9 @@ from core.online_detect import handle_events as online_detect_handle_events  # �
 # 模板模块
 from modules.template.main import handle_events as template_handle_events
 
+# 上报模块
+from modules.reporter.main import handle_events as reporter_handle_events
+
 
 class EventHandler:
     def __init__(self):
@@ -25,6 +28,7 @@ class EventHandler:
             # ----------------------------------------------------
             # 功能模块
             template_handle_events,  # 模板模块
+            reporter_handle_events,  # 报告模块
             # ----------------------------------------------------
             # 在这里注册新的模块
         ]

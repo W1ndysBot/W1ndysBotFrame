@@ -29,23 +29,23 @@ class RequestHandler:
                 f"请求备注: {self.comment}\n"
                 f"请求ID: {self.flag}\n"
                 f"请求时间: {self.time}\n"
-                f"可以发送“同意/拒绝+请求ID”来处理请求\n"
+                f"可以发送“同意/拒绝好友请求+请求ID”来处理请求\n"
             )
             await send_private_msg(
                 self.websocket,
                 OWNER_ID,
                 [text_message],
             )
-            text_message_agree = generate_text_message(f"同意 {self.flag}")
+            text_message_agree = generate_text_message(f"同意好友请求 {self.flag}")
             await send_private_msg(
                 self.websocket,
-                self.user_id,
+                OWNER_ID,
                 [text_message_agree],
             )
-            text_message_reject = generate_text_message(f"拒绝 {self.flag}")
+            text_message_reject = generate_text_message(f"拒绝好友请求 {self.flag}")
             await send_private_msg(
                 self.websocket,
-                self.user_id,
+                OWNER_ID,
                 [text_message_reject],
             )
         except Exception as e:

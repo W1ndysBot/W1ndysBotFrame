@@ -62,9 +62,7 @@ def save_switch(switch, MODULE_NAME):
         logger.error(f"[{MODULE_NAME}]保存开关文件失败: {e}")
 
 
-def toggle_switch(
-    switch_type: str, group_id: str = "0", MODULE_NAME: str = "template"
-) -> bool:
+def toggle_switch(switch_type, MODULE_NAME, group_id="0"):
     """
     切换某模块的开关
     switch_type: 开关类型，group或private
