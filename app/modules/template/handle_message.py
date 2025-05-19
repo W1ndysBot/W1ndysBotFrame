@@ -16,7 +16,12 @@ class MessageHandler:
         处理群消息
         """
         try:
-            pass
+            self.group_id = str(self.msg.get("group_id", ""))  # 群号
+            self.message_id = str(self.msg.get("message_id", ""))  # 消息ID
+            self.user_id = str(self.msg.get("user_id", ""))  # 发送者QQ号
+            self.message = self.msg.get("message", {})  # 消息段数组
+            self.raw_message = self.msg.get("raw_message", "")  # 原始消息
+            self.sender = self.msg.get("sender", {})  # 发送者信息
         except Exception as e:
             logger.error(f"[{MODULE_NAME}]处理群消息失败: {e}")
 

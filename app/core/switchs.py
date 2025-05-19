@@ -4,16 +4,11 @@
 开关文件为switch.json，存储结构为：
 //群聊开关
 {
-    "switch": {
+    "group": {
         "群号1": True,
         "群号2": False
-    }
-}
-//私聊功能开关
-{
-    "switch": {
-        "私聊功能1": True,
-    }
+    },
+    "private": True
 }
 """
 
@@ -59,15 +54,23 @@ def save_switch(switch, MODULE_NAME):
         logger.error(f"[{MODULE_NAME}]保存开关文件失败: {e}")
 
 
-def toggle_switch(group_id, MODULE_NAME):
+def toggle_switch(
+    switch_type: str, group_id: str = "0", MODULE_NAME: str = "example"
+) -> bool:
     """
     切换某模块的开关
+    switch_type: 开关类型，group或private
+    group_id: 群号，仅当switch_type为group时有效
+    MODULE_NAME: 模块名称
     """
     try:
         switch = load_switch(MODULE_NAME)
-        switch[group_id] = not switch[group_id]
+        if switch_type == "group":
+            switch["group"][group_id] = not switch["group"][group_id]
+        elif switch_type == "private":
+            switch["private"] = not switch["private"]
         save_switch(switch, MODULE_NAME)
-        return switch[group_id]
+        return switch[switch_type][group_id]
     except Exception as e:
         logger.error(f"[{MODULE_NAME}]切换开关失败: {e}")
         return False
@@ -85,9 +88,9 @@ def load_group_all_switch(group_id):
     }
     """
     switch = {group_id: {}}
-    # 遍历所有数据目录
+    # 遍历所有数据目录，100次遍历大概消耗0.02秒
     for module_name in os.listdir(DATA_ROOT_DIR):
         switch_data = load_switch(module_name)
-        if group_id in switch_data.get("switch", {}):
-            switch[group_id][module_name] = switch_data["switch"][group_id]
+        if group_id in switch_data.get("group", {}):
+            switch[group_id][module_name] = switch_data["group"][group_id]
     return switch
