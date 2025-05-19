@@ -19,7 +19,7 @@ class EventHandler:
             clean_logs,  # 日志清理
             online_detect_handle_events,  # 在线监测
             template_handle_events,  # 模板模块
-            ...,  # 在这里注册新的模块
+            # 在这里注册新的模块
         ]
 
     async def handle_message(self, websocket, message):
