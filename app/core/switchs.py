@@ -35,10 +35,18 @@ def load_switch(MODULE_NAME):
             with open(SWITCH_PATH, "r", encoding="utf-8") as f:
                 return json.load(f)
         else:
-            return {}
+            # 如果文件不存在，则创建一个默认的开关文件
+            switch = {"group": {}, "private": False}
+            with open(SWITCH_PATH, "w", encoding="utf-8") as f:
+                json.dump(switch, f, ensure_ascii=False, indent=4)
+            return switch
     except (json.JSONDecodeError, IOError) as e:
         logger.error(f"[{MODULE_NAME}]加载开关文件失败: {e}")
-        return {}
+        # 如果文件出错或不存在，则创建一个默认的开关文件
+        switch = {"group": {}, "private": False}
+        with open(SWITCH_PATH, "w", encoding="utf-8") as f:
+            json.dump(switch, f, ensure_ascii=False, indent=4)
+        return switch
 
 
 def save_switch(switch, MODULE_NAME):
@@ -49,13 +57,13 @@ def save_switch(switch, MODULE_NAME):
         SWITCH_PATH = os.path.join(DATA_ROOT_DIR, MODULE_NAME, "switch.json")
         os.makedirs(os.path.dirname(SWITCH_PATH), exist_ok=True)
         with open(SWITCH_PATH, "w", encoding="utf-8") as f:
-            json.dump(switch, f, ensure_ascii=False, indent=2)
+            json.dump(switch, f, ensure_ascii=False, indent=4)
     except IOError as e:
         logger.error(f"[{MODULE_NAME}]保存开关文件失败: {e}")
 
 
 def toggle_switch(
-    switch_type: str, group_id: str = "0", MODULE_NAME: str = "example"
+    switch_type: str, group_id: str = "0", MODULE_NAME: str = "template"
 ) -> bool:
     """
     切换某模块的开关
@@ -66,11 +74,17 @@ def toggle_switch(
     try:
         switch = load_switch(MODULE_NAME)
         if switch_type == "group":
-            switch["group"][group_id] = not switch["group"][group_id]
+            # 如果没有群号键则直接写入
+            if group_id not in switch["group"]:
+                switch["group"][group_id] = True
+            else:
+                switch["group"][group_id] = not switch["group"][group_id]
+            result = switch["group"][group_id]
         elif switch_type == "private":
             switch["private"] = not switch["private"]
+            result = switch["private"]
         save_switch(switch, MODULE_NAME)
-        return switch[switch_type][group_id]
+        return result
     except Exception as e:
         logger.error(f"[{MODULE_NAME}]切换开关失败: {e}")
         return False
@@ -90,7 +104,10 @@ def load_group_all_switch(group_id):
     switch = {group_id: {}}
     # 遍历所有数据目录，100次遍历大概消耗0.02秒
     for module_name in os.listdir(DATA_ROOT_DIR):
-        switch_data = load_switch(module_name)
-        if group_id in switch_data.get("group", {}):
-            switch[group_id][module_name] = switch_data["group"][group_id]
+        try:
+            switch_data = load_switch(module_name)
+            if group_id in switch_data.get("group", {}):
+                switch[group_id][module_name] = switch_data["group"][group_id]
+        except Exception as e:
+            logger.error(f"加载模块 {module_name} 的开关数据失败: {e}")
     return switch

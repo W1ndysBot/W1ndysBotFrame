@@ -18,13 +18,21 @@ SWITCH_FILE = os.path.join(DATA_DIR, "switch.json")
 
 # 切换群聊开关
 def toggle_group_switch(group_id, MODULE_NAME):
-    switch_status = toggle_switch("group", group_id, MODULE_NAME)
-    logger.info(f"[{MODULE_NAME}]群聊开关已切换为【{switch_status}】")
-    return switch_status
+    try:
+        switch_status = toggle_switch("group", group_id, MODULE_NAME)
+        logger.info(f"[{MODULE_NAME}]群聊开关已切换为【{switch_status}】")
+        return switch_status
+    except Exception as e:
+        logger.error(f"[{MODULE_NAME}]切换群聊开关失败: {e}")
+        return False
 
 
 # 切换私聊开关
 def toggle_private_switch(MODULE_NAME):
-    switch_status = toggle_switch("private", MODULE_NAME)
-    logger.info(f"[{MODULE_NAME}]私聊开关已切换为【{switch_status}】")
-    return switch_status
+    try:
+        switch_status = toggle_switch("private", MODULE_NAME)
+        logger.info(f"[{MODULE_NAME}]私聊开关已切换为【{switch_status}】")
+        return switch_status
+    except Exception as e:
+        logger.error(f"[{MODULE_NAME}]切换私聊开关失败: {e}")
+        return False

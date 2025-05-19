@@ -45,7 +45,7 @@ class MessageHandler:
                     return
 
             # 如果没开启群聊开关，则不处理
-            if not load_switch(MODULE_NAME)["group"][self.group_id]:
+            if not load_switch(MODULE_NAME)["group"].get(self.group_id, False):
                 return
 
             # 测试消息
@@ -69,6 +69,7 @@ class MessageHandler:
         try:
             self.sub_type = self.msg.get("sub_type", "")  # 子类型,friend/group
             self.user_id = str(self.msg.get("user_id", ""))  # 发送者QQ号
+            self.message_id = str(self.msg.get("message_id", ""))  # 消息ID
             self.message = self.msg.get("message", {})  # 消息段数组
             self.raw_message = self.msg.get("raw_message", "")  # 原始消息
             self.sender = self.msg.get("sender", {})  # 发送者信息
@@ -76,17 +77,17 @@ class MessageHandler:
 
             if self.raw_message.lower() == MODULE_NAME.lower():
                 switch_status = toggle_private_switch(MODULE_NAME)
-                if switch_status:
-                    reply_message = generate_reply_message(self.message_id)
-                    text_message = generate_text_message(
-                        f"[{MODULE_NAME}]私聊开关已切换为【{switch_status}】"
-                    )
-                    await send_private_msg(
-                        self.websocket,
-                        self.user_id,
-                        [reply_message, text_message],
-                    )
-                    return
+                switch_status = "开启" if switch_status else "关闭"
+                reply_message = generate_reply_message(self.message_id)
+                text_message = generate_text_message(
+                    f"[{MODULE_NAME}]私聊开关已切换为【{switch_status}】"
+                )
+                await send_private_msg(
+                    self.websocket,
+                    self.user_id,
+                    [reply_message, text_message],
+                )
+                return
 
             # 如果没开启私聊开关，则不处理
             if not load_switch(MODULE_NAME)["private"]:
