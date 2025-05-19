@@ -2,7 +2,9 @@ from . import *
 import logger
 from core.auth import is_owner
 from api.message import send_private_msg
+from api.user import set_friend_add_request
 from api.generate import generate_reply_message, generate_text_message
+import re
 
 
 class PrivateMessageHandler:
@@ -43,14 +45,24 @@ class PrivateMessageHandler:
             if not load_switch(MODULE_NAME)["private"]:
                 return
 
-            # 测试消息
-            if self.raw_message.lower() in ["测试", "test"]:
+            # 鉴权
+            if not is_owner(self.user_id):
+                return
+
+            # 处理好友请求
+            # 格式: 同意/拒绝+请求ID
+            if re.match(r"^(同意|拒绝)\s+\d+$", self.raw_message):
+                # 提取行为和请求ID
+                parts = self.raw_message.split(" ")
+                action = parts[0]
+                flag = parts[1]
+                # 处理好友请求
+                approve = action == "同意"
+                await set_friend_add_request(self.websocket, flag, approve)
                 reply_message = generate_reply_message(self.message_id)
-                text_message = generate_text_message(f"[{MODULE_NAME}]测试成功")
+                text_message = generate_text_message(f"[{MODULE_NAME}]已处理好友请求")
                 await send_private_msg(
-                    self.websocket,
-                    self.user_id,
-                    [reply_message, text_message],
+                    self.websocket, self.user_id, [reply_message, text_message]
                 )
                 return
 

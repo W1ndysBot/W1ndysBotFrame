@@ -1,5 +1,8 @@
 from . import *
 import logger
+from api.generate import generate_text_message
+from api.message import send_private_msg
+from config import OWNER_ID
 
 
 class RequestHandler:
@@ -18,7 +21,35 @@ class RequestHandler:
         """
         处理好友请求
         """
-        pass
+        try:
+            text_message = generate_text_message(
+                f"[{MODULE_NAME}]收到好友请求\n"
+                f"用户ID: {self.user_id}\n"
+                f"请求类型: {self.request_type}\n"
+                f"请求备注: {self.comment}\n"
+                f"请求ID: {self.flag}\n"
+                f"请求时间: {self.time}\n"
+                f"可以发送“同意/拒绝+请求ID”来处理请求\n"
+            )
+            await send_private_msg(
+                self.websocket,
+                OWNER_ID,
+                [text_message],
+            )
+            text_message_agree = generate_text_message(f"同意 {self.flag}")
+            await send_private_msg(
+                self.websocket,
+                self.user_id,
+                [text_message_agree],
+            )
+            text_message_reject = generate_text_message(f"拒绝 {self.flag}")
+            await send_private_msg(
+                self.websocket,
+                self.user_id,
+                [text_message_reject],
+            )
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理好友请求失败: {e}")
 
     async def handle_group(self):
         """
