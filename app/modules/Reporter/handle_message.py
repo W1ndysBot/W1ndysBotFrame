@@ -1,4 +1,5 @@
 from . import MODULE_NAME, DATA_DIR, SWITCH_FILE
+from config import OWNER_ID
 
 import logger
 

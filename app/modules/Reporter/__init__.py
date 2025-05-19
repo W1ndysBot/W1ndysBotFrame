@@ -1,10 +1,10 @@
 import os
 
 # 模块名称
-MODULE_NAME = "PrivateMessageReporter"
+MODULE_NAME = "Reporter"
 
 # 模块描述
-MODULE_DESCRIPTION = "私聊转达"
+MODULE_DESCRIPTION = "消息报告、私聊转达、加好友通知、拉群通知"
 
 # 数据目录
 DATA_DIR = os.path.join("data", MODULE_NAME)
