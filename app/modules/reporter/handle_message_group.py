@@ -5,6 +5,7 @@ from api.message import send_group_msg
 from api.generate import generate_reply_message, generate_text_message
 from datetime import datetime
 
+
 class GroupMessageHandler:
     """群消息处理器"""
 

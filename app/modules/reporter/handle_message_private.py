@@ -52,6 +52,16 @@ class PrivateMessageHandler:
 
             # 鉴权
             if is_owner(self.user_id):
+
+                # 处理测试消息
+                if self.raw_message.lower() in ["测试", "test"]:
+                    reply_message = generate_reply_message(self.message_id)
+                    text_message = generate_text_message(f"[{MODULE_NAME}]测试成功")
+                    await send_private_msg(
+                        self.websocket, self.user_id, [reply_message, text_message]
+                    )
+                    return
+
                 # 处理好友请求
                 # 格式: 同意/拒绝好友请求+请求ID
                 if re.match(r"^(同意|拒绝)好友请求\s*\d+$", self.raw_message):

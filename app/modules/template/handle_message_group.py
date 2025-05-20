@@ -5,6 +5,7 @@ from api.message import send_group_msg
 from api.generate import generate_reply_message, generate_text_message
 from datetime import datetime
 
+
 class GroupMessageHandler:
     """群消息处理器"""
 
@@ -47,17 +48,6 @@ class GroupMessageHandler:
 
             # 如果没开启群聊开关，则不处理
             if not load_switch(MODULE_NAME)["group"].get(self.group_id, False):
-                return
-
-            # 测试消息
-            if self.raw_message.lower() in ["测试", "test"]:
-                reply_message = generate_reply_message(self.message_id)
-                text_message = generate_text_message(f"[{MODULE_NAME}]测试成功")
-                await send_group_msg(
-                    self.websocket,
-                    self.group_id,
-                    [reply_message, text_message],
-                )
                 return
 
         except Exception as e:
