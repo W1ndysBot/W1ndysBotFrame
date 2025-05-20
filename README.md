@@ -1,9 +1,9 @@
 # 🤖 W1ndysBotFrame
 
-![GitHub stars](https://img.shields.io/github/stars/W1ndys/W1ndysBotFrame?style=flat-square)
-![GitHub forks](https://img.shields.io/github/forks/W1ndys/W1ndysBotFrame?style=flat-square)
-![GitHub issues](https://img.shields.io/github/issues/W1ndys/W1ndysBotFrame?style=flat-square)
-![GitHub license](https://img.shields.io/github/license/W1ndys/W1ndysBotFrame?style=flat-square)
+![GitHub stars](https://img.shields.io/github/stars/W1ndysBot/W1ndysBotFrame?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/W1ndysBot/W1ndysBotFrame?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/W1ndysBot/W1ndysBotFrame?style=flat-square)
+![GitHub license](https://img.shields.io/github/license/W1ndysBot/W1ndysBotFrame?style=flat-square)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/W1ndysBot/W1ndysBotFrame)
 
 ## 项目正在重构阶段，可能不稳定！！！
