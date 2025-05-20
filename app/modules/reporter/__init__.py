@@ -18,6 +18,13 @@ SWITCH_FILE = os.path.join(DATA_DIR, "switch.json")
 # 加载开关
 load_switch(MODULE_NAME)
 
+# 模块的一些命令可以在这里定义，方便在其他地方调用，提高代码的复用率
+# ------------------------------------------------------------
+# COMMANDS1 = "命令1"
+# COMMANDS2 = "命令2"
+# COMMANDS3 = "命令3"
+# ------------------------------------------------------------
+
 
 # 切换群聊开关
 def toggle_group_switch(group_id, MODULE_NAME):

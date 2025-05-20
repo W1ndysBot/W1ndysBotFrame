@@ -15,6 +15,14 @@ os.makedirs(DATA_DIR, exist_ok=True)
 # 开关文件
 SWITCH_FILE = os.path.join(DATA_DIR, "switch.json")
 
+
+# 模块的一些命令可以在这里定义，方便在其他地方调用，提高代码的复用率
+# ------------------------------------------------------------
+# COMMANDS1 = "命令1"
+# COMMANDS2 = "命令2"
+# COMMANDS3 = "命令3"
+# ------------------------------------------------------------
+
 # 加载开关
 load_switch(MODULE_NAME)
 
