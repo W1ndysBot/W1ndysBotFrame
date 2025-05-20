@@ -2,6 +2,7 @@ from . import *
 import logger
 from datetime import datetime
 
+
 class MetaEventHandler:
     """
     元事件处理器/定时任务处理器
@@ -16,6 +17,34 @@ class MetaEventHandler:
             "%Y-%m-%d %H:%M:%S"
         )  # 格式化时间
         self.post_type = msg.get("post_type", "")
+        self.sub_type = msg.get("sub_type", "")
 
     async def handle(self):
-        pass
+        try:
+            if self.post_type == "heartbeat":
+                await self.handle_heartbeat()
+            elif self.post_type == "lifecycle":
+                await self.handle_lifecycle()
+            else:
+                logger.error(f"[{MODULE_NAME}]收到未知元事件类型: {self.post_type}")
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理元事件失败: {e}")
+
+    async def handle_lifecycle(self):
+        """
+        处理生命周期
+        """
+        try:
+            if self.sub_type == "connect":
+                pass
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理生命周期失败: {e}")
+
+    async def handle_heartbeat(self):
+        """
+        处理心跳
+        """
+        try:
+            pass
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理心跳失败: {e}")
