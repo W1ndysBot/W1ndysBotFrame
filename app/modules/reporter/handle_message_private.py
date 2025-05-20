@@ -3,7 +3,7 @@ import logger
 from core.auth import is_owner
 from config import OWNER_ID
 from api.message import send_private_msg
-from api.user import set_friend_add_request
+from api.user import set_friend_add_request, set_group_add_request
 from api.generate import generate_reply_message, generate_text_message
 import re
 from datetime import datetime
@@ -69,7 +69,25 @@ class PrivateMessageHandler:
                         self.websocket, self.user_id, [reply_message, text_message]
                     )
                     return
-
+                # 处理群请求
+                # 格式: 同意/拒绝邀请登录号入群请求+请求ID
+                if re.match(r"^(同意|拒绝)邀请登录号入群请求\s*\d+$", self.raw_message):
+                    # 提取行为和请求ID
+                    parts = self.raw_message.split(" ")
+                    action = parts[0]
+                    flag = parts[1]
+                    logger.info(f"[{MODULE_NAME}]处理群请求: {action} {flag}")
+                    # 处理群请求
+                    approve = action == "同意群请求"
+                    await set_group_add_request(
+                        self.websocket, flag, approve, reason=""
+                    )
+                    reply_message = generate_reply_message(self.message_id)
+                    text_message = generate_text_message(f"[{MODULE_NAME}]已{action}")
+                    await send_private_msg(
+                        self.websocket, self.user_id, [reply_message, text_message]
+                    )
+                    return
             # 普通消息转发给owner
             else:
                 message = f"[{MODULE_NAME}]收到私聊消息\n"
