@@ -17,16 +17,19 @@ class MetaEventHandler:
             "%Y-%m-%d %H:%M:%S"
         )  # 格式化时间
         self.post_type = msg.get("post_type", "")
-        self.sub_type = msg.get("sub_type", "")
+        self.meta_event_type = msg.get("meta_event_type", "")
 
     async def handle(self):
         try:
-            if self.post_type == "heartbeat":
-                await self.handle_heartbeat()
-            elif self.post_type == "lifecycle":
-                await self.handle_lifecycle()
-            else:
-                logger.error(f"[{MODULE_NAME}]收到未知元事件类型: {self.post_type}")
+            if self.post_type == "meta_event":
+                if self.meta_event_type == "lifecycle":
+                    await self.handle_lifecycle()
+                elif self.meta_event_type == "heartbeat":
+                    await self.handle_heartbeat()
+                else:
+                    logger.error(
+                        f"[{MODULE_NAME}]收到未知元事件类型: {self.meta_event_type}"
+                    )
         except Exception as e:
             logger.error(f"[{MODULE_NAME}]处理元事件失败: {e}")
 
@@ -35,7 +38,7 @@ class MetaEventHandler:
         处理生命周期
         """
         try:
-            if self.sub_type == "connect":
+            if self.meta_event_type == "connect":
                 pass
         except Exception as e:
             logger.error(f"[{MODULE_NAME}]处理生命周期失败: {e}")
