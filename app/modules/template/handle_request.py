@@ -22,36 +22,51 @@ class RequestHandler:
         """
         处理好友请求
         """
-        pass
+        try:
+            pass
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理好友请求失败: {e}")
 
     async def handle_group(self):
         """
         处理群请求
         """
-        self.sub_type = self.msg.get("sub_type", "")
-        if self.sub_type == "invite":
-            await self.handle_group_invite()
-        elif self.sub_type == "add":
-            await self.handle_group_add()
-        else:
-            logger.error(f"[{MODULE_NAME}]收到未知群请求类型: {self.sub_type}")
+        try:
+            self.sub_type = self.msg.get("sub_type", "")
+            if self.sub_type == "invite":
+                await self.handle_group_invite()
+            elif self.sub_type == "add":
+                await self.handle_group_add()
+            else:
+                logger.error(f"[{MODULE_NAME}]收到未知群请求类型: {self.sub_type}")
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理群请求失败: {e}")
 
     async def handle_group_invite(self):
         """
-        处理群邀请请求
+        处理邀请登录号入群请求
         """
-        pass
+        try:
+            pass
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理邀请登录号入群请求失败: {e}")
 
     async def handle_group_add(self):
         """
-        处理群添加请求
+        处理加群请求
         """
-        pass
+        try:
+            pass
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理加群请求失败: {e}")
 
     async def handle(self):
-        if self.request_type == "friend":
-            await self.handle_friend()
-        elif self.request_type == "group":
-            await self.handle_group()
-        else:
-            logger.error(f"[{MODULE_NAME}]收到未知请求类型: {self.request_type}")
+        try:
+            if self.request_type == "friend":
+                await self.handle_friend()
+            elif self.request_type == "group":
+                await self.handle_group()
+            else:
+                logger.error(f"[{MODULE_NAME}]收到未知请求类型: {self.request_type}")
+        except Exception as e:
+            logger.error(f"[{MODULE_NAME}]处理请求失败: {e}")
