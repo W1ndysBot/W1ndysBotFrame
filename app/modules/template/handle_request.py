@@ -38,13 +38,13 @@ class RequestHandler:
 
     async def handle_group_invite(self):
         """
-        处理群邀请请求
+        处理邀请登录号入群请求
         """
         pass
 
     async def handle_group_add(self):
         """
-        处理群添加请求
+        处理加群请求
         """
         pass
 
