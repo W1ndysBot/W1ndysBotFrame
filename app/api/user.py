@@ -169,6 +169,27 @@ async def set_friend_add_request(websocket, flag, approve, remark=""):
         return False
 
 
+async def set_group_add_request(websocket, flag, approve, reason=""):
+    """
+    处理群请求
+    参数:
+        flag (string): 请求id，必需
+        approve (boolean): 是否同意，必需
+        reason (string): 拒绝理由，可选
+    """
+    try:
+        message = {
+            "action": "set_group_add_request",
+            "params": {"flag": flag, "approve": approve, "reason": reason},
+        }
+        await websocket.send(json.dumps(message))
+        logger.info(f"[API]已执行处理群请求")
+        return True
+    except Exception as e:
+        logger.error(f"[API]处理群请求失败: {e}")
+        return False
+
+
 async def set_self_longnick(websocket, long_nick):
     """
     设置个性签名
