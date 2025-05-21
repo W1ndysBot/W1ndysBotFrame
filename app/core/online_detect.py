@@ -31,13 +31,9 @@ async def handle_events(websocket, message):
             connect_msg = f"W1ndysGroupBot已上线！\n机器人ID: {message.get('self_id')}\n上线时间: {current_time}"
             logger.info(f"机器人首次连接: {connect_msg}")
 
-            # 向所有管理员发送私聊消息
+            # 向管理员发送私聊消息
             try:
-                tasks = [
-                    send_private_msg(websocket, owner, connect_msg)
-                    for owner in OWNER_ID
-                ]
-                await asyncio.gather(*tasks)
+                await send_private_msg(websocket, OWNER_ID, connect_msg)
             except Exception as e:
                 logger.error(f"发送上线通知失败: {e}")
             return

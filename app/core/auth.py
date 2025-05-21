@@ -9,7 +9,7 @@ def is_owner(user_id: str) -> bool:
     """
     判断是否为系统管理员
     """
-    return user_id in OWNER_ID
+    return user_id == OWNER_ID
 
 
 def is_group_admin(role: str) -> bool:
