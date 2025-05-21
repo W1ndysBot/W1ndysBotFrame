@@ -22,16 +22,20 @@ app/
 │   ├── generate.py        # 生成相关接口
 │   └── group.py           # 群组管理接口
 ├── core/                   # 核心功能模块
-│   ├── feishu.py          # 飞书集成
-│   └── online_detect.py   # 在线检测
+│   ├── auth.py            # 权限认证
+│   ├── online_detect.py   # 在线检测
+│   └── switchs.py         # 开关管理
 ├── modules/               # 模块目录
-│   └── Example/          # 示例模块
+│   └── template/          # 模板模块
 │       ├── main.py              # 主程序入口
 │       ├── handle_message.py   # 消息处理器
 │       ├── handle_notice.py    # 通知处理器
 │       ├── handle_request.py   # 请求处理器
 │       ├── handle_response.py  # 响应处理器
 │       └── README.md           # 说明文档
+├── utils/                   # 工具函数模块
+│   ├── feishu.py            # 飞书集成
+│   └── logs_clean.py        # 日志清理
 ├── bot.py                 # 机器人主程序
 ├── handle_events.py      # 事件处理器
 ├── main.py               # 程序入口
