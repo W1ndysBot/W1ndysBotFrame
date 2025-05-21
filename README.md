@@ -73,3 +73,7 @@ app/
 - `TOKEN`: 认证 token(可选)
 - `FEISHU_BOT_URL`: 飞书机器人 URL(可选)
 - `FEISHU_BOT_SECRET`: 飞书机器人 Secret(可选)
+
+## 🌟 星标历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=W1ndysBot/W1ndysBotFrame&type=Date)](https://star-history.com/#W1ndysBot/W1ndysBotFrame&Date)
