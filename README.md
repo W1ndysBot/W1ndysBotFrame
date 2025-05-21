@@ -57,7 +57,7 @@ app/
 
 ## 🛠️ 开发说明
 
-- 新功能开发请参考 `app/modules/example` 目录的示例
+- 新功能开发请参考 `app/modules/template` 目录的示例
 - 数据存储请在 `app/data` 下创建对应目录
 
 ## ⚙️ 配置说明
