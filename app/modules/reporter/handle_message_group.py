@@ -1,6 +1,6 @@
 from . import *
 import logger
-from core.auth import is_owner, is_group_admin
+from core.switchs import load_switch, toggle_group_switch
 from api.message import send_group_msg
 from api.generate import generate_reply_message, generate_text_message
 from datetime import datetime

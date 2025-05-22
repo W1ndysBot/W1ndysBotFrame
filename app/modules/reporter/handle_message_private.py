@@ -1,6 +1,7 @@
 from . import *
 import logger
 from core.auth import is_owner
+from core.switchs import load_switch, toggle_private_switch
 from config import OWNER_ID
 from api.message import send_private_msg
 from api.user import set_friend_add_request, set_group_add_request

@@ -24,6 +24,30 @@ DATA_ROOT_DIR = "data"
 os.makedirs(DATA_ROOT_DIR, exist_ok=True)
 
 
+# 切换群聊开关
+def toggle_group_switch(group_id, MODULE_NAME):
+    try:
+        switch_status = toggle_switch(
+            switch_type="group", group_id=group_id, MODULE_NAME=MODULE_NAME
+        )
+        logger.info(f"[{MODULE_NAME}]群聊开关已切换为【{switch_status}】")
+        return switch_status
+    except Exception as e:
+        logger.error(f"[{MODULE_NAME}]切换群聊开关失败: {e}")
+        return False
+
+
+# 切换私聊开关
+def toggle_private_switch(MODULE_NAME):
+    try:
+        switch_status = toggle_switch(switch_type="private", MODULE_NAME=MODULE_NAME)
+        logger.info(f"[{MODULE_NAME}]私聊开关已切换为【{switch_status}】")
+        return switch_status
+    except Exception as e:
+        logger.error(f"[{MODULE_NAME}]切换私聊开关失败: {e}")
+        return False
+
+
 def load_switch(MODULE_NAME):
     """
     加载某模块的开关

@@ -1,5 +1,6 @@
 from . import *
 import logger
+from core.switchs import load_switch
 
 
 class FriendNoticeHandler:

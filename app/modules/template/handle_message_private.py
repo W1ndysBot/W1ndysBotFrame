@@ -1,6 +1,6 @@
 from . import *
 import logger
-from core.auth import is_owner
+from core.switchs import load_switch, toggle_private_switch
 from api.message import send_private_msg
 from api.generate import generate_reply_message, generate_text_message
 from datetime import datetime
