@@ -18,7 +18,7 @@ async def handle_events(websocket, msg):
     """
     try:
 
-        # 处理回调事件
+        # 处理回应事件
         if msg.get("status") == "ok":
             await ResponseHandler(websocket, msg).handle()
             return
