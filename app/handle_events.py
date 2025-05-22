@@ -17,6 +17,7 @@ CORE_MODULES = [
     ("utils.logs_clean", "clean_logs"),  # 日志清理
     # 核心功能
     ("core.online_detect", "handle_events"),  # 在线监测
+    ("core.auto_del_selfmsg", "handle_events"),  # 自动撤回自己发送的消息
     # 在这里添加其他必须加载的核心模块
 ]
 
