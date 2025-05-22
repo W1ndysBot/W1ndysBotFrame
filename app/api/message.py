@@ -4,17 +4,19 @@ import logger
 
 
 # 使用cq码发送群消息
-async def send_group_msg_with_cq(websocket, group_id, content):
+async def send_group_msg_with_cq(websocket, group_id, content, note=""):
     """
     发送群消息，使用旧的消息格式（cq码）
-
+    如需自动撤回，请在note参数中添加“del_msg_秒数_消息ID”
+    如：del_msg_10_123456
+    则note参数为：del_msg_10_123456
     https://napcat.apifox.cn/226799128e0
     """
     try:
         message = {
             "action": "send_group_msg",
             "params": {"group_id": group_id, "message": content},
-            "echo": f"send_group_msg_{content}",
+            "echo": f"send_group_msg_{note}",
         }
         await websocket.send(json.dumps(message))
         logger.info(f"[API]已执行发送群消息到群 {group_id}")
@@ -23,10 +25,9 @@ async def send_group_msg_with_cq(websocket, group_id, content):
 
 
 # 使用cq码发送私聊消息
-async def send_private_msg_with_cq(websocket, user_id, content):
+async def send_private_msg_with_cq(websocket, user_id, content, note=""):
     """
     发送私聊消息，使用旧的消息格式（cq码）
-    消息段可使用generate模块的函数生成
     如需自动撤回，请在note参数中添加“del_msg_秒数_消息ID”
     如：del_msg_10_123456
     则note参数为：del_msg_10_123456
@@ -36,7 +37,7 @@ async def send_private_msg_with_cq(websocket, user_id, content):
         message = {
             "action": "send_private_msg",
             "params": {"user_id": user_id, "message": content},
-            "echo": "send_private_msg",
+            "echo": f"send_private_msg_{note}",
         }
         await websocket.send(json.dumps(message))
         logger.info(f"[API]已执行发送消息到用户 {user_id}")
