@@ -77,6 +77,16 @@ app/
 - `FEISHU_BOT_URL`: 飞书机器人 URL(可选)
 - `FEISHU_BOT_SECRET`: 飞书机器人 Secret(可选)
 
+## 更新方法
+
+克隆新版本，覆盖原文件，重新运行即可
+
+（注意备份好数据、日志、配置文件、自己开发的功能等，建议使用 git 管理，或复制新目录再覆盖）
+
+```bash
+git clone https://github.com/W1ndysBot/W1ndysBotFrame.git
+```
+
 ## 🌟 星标历史
 
 [![Star History Chart](https://api.star-history.com/svg?repos=W1ndysBot/W1ndysBotFrame&type=Date)](https://star-history.com/#W1ndysBot/W1ndysBotFrame&Date)
