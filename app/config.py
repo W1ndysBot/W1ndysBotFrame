@@ -10,9 +10,11 @@ WS_URL = "ws://127.0.0.1:3001"
 TOKEN = ""
 
 # 飞书机器人URL，选填，掉线时使用
-FEISHU_BOT_URL = ""
+FEISHU_BOT_URL = (
+    "https://open.feishu.cn/open-apis/bot/v2/hook/55648a44-6e84-4d8c-af16-30065ffba8c1"
+)
 
 # 飞书机器人Secret，选填，掉线时使用
-FEISHU_BOT_SECRET = ""
+FEISHU_BOT_SECRET = "zOrUWi4tEpPUafjtJoRkD"
 
 # ==================== 配置项结束 ====================
