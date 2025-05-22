@@ -26,7 +26,10 @@ async def send_group_msg_with_cq(websocket, group_id, content):
 async def send_private_msg_with_cq(websocket, user_id, content):
     """
     发送私聊消息，使用旧的消息格式（cq码）
-
+    消息段可使用generate模块的函数生成
+    如需自动撤回，请在note参数中添加“del_msg_秒数_消息ID”
+    如：del_msg_10_123456
+    则note参数为：del_msg_10_123456
     https://napcat.apifox.cn/226799128e0
     """
     try:
@@ -48,6 +51,10 @@ async def send_group_msg(websocket, group_id, message, note=""):
         "type": "text",
         "data": {"text": "消息内容"}
     }
+    消息段可使用generate模块的函数生成
+    如需自动撤回，请在note参数中添加“del_msg_秒数_消息ID”
+    如：del_msg_10_123456
+    则note参数为：del_msg_10_123456
     https://napcat.apifox.cn/226799128e0
     """
     try:

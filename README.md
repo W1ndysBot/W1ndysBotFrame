@@ -65,7 +65,7 @@ app/
 
 - 新功能开发请参考 `app/modules/template` 目录的示例
 - 数据存储请在 `app/data` 下创建对应目录
-- 如需定时撤回消息，请在[发送消息 API](https://github.com/W1ndysBot/W1ndysBotFrame/blob/a88d4c97551b16fd863f304ed31560b4a7ff2268/app/api/message.py#L44-L101) 的`note`参数中传入`(秒)秒撤回(消息ID)消息`，例如`10秒撤回1234567890消息`
+- 如需定时撤回消息，请在[发送消息 API](https://github.com/W1ndysBot/W1ndysBotFrame/blob/a88d4c97551b16fd863f304ed31560b4a7ff2268/app/api/message.py#L44-L101) 的`note`参数中传入`del_msg_秒数_消息ID`，例如`del_msg_10_1234567890`
 
 ## ⚙️ 配置说明
 
