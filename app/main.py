@@ -1,7 +1,6 @@
 import os
 import asyncio
 from datetime import datetime
-from dotenv import load_dotenv
 from logger import logger
 from bot import connect_to_bot
 from config import OWNER_ID, WS_URL, TOKEN, FEISHU_BOT_URL, FEISHU_BOT_SECRET
