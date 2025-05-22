@@ -6,15 +6,13 @@ import os
 import importlib.util
 import inspect
 
-# 工具模块
-from utils.logs_clean import clean_logs  # 日志清理
 
 # 核心模块列表 - 这些模块将始终被加载
 # 格式: ("模块路径", "模块中的函数名")
 # 请不要修改这些模块，除非你知道你在做什么
 CORE_MODULES = [
     # 系统工具
-    ("utils.logs_clean", "clean_logs"),  # 日志清理
+    ("utils.clean_logs", "clean_logs"),  # 日志清理
     # 核心功能
     ("core.online_detect", "handle_events"),  # 在线监测
     ("core.auto_del_selfmsg", "handle_events"),  # 自动撤回自己发送的消息
