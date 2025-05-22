@@ -1,6 +1,6 @@
 from . import *
 import logger
-from core.switchs import load_switch, toggle_private_switch
+from core.switchs import is_private_switch_on, toggle_private_switch
 from api.message import send_private_msg
 from api.generate import generate_reply_message, generate_text_message
 from datetime import datetime
@@ -44,7 +44,7 @@ class PrivateMessageHandler:
                 return
 
             # 如果没开启私聊开关，则不处理
-            if not load_switch(MODULE_NAME)["private"]:
+            if not is_private_switch_on(MODULE_NAME):
                 return
 
         except Exception as e:

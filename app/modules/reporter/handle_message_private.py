@@ -1,7 +1,7 @@
 from . import *
 import logger
 from core.auth import is_owner
-from core.switchs import load_switch, toggle_private_switch
+from core.switchs import is_private_switch_on, toggle_private_switch
 from config import OWNER_ID
 from api.message import send_private_msg
 from api.user import set_friend_add_request, set_group_add_request
@@ -48,7 +48,7 @@ class PrivateMessageHandler:
                 return
 
             # 如果没开启私聊开关，则不处理
-            if not load_switch(MODULE_NAME)["private"]:
+            if not is_private_switch_on(MODULE_NAME):
                 return
 
             # 鉴权

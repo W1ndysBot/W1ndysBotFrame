@@ -24,6 +24,33 @@ DATA_ROOT_DIR = "data"
 os.makedirs(DATA_ROOT_DIR, exist_ok=True)
 
 
+# 是否开启群聊开关
+def is_group_switch_on(group_id, MODULE_NAME):
+    """
+    判断群聊开关是否开启，默认关闭
+    group_id: 群号
+    MODULE_NAME: 模块名称
+    返回值:
+    True: 开启
+    False: 关闭
+    """
+    switch = load_switch(MODULE_NAME)
+    return switch["group"].get(group_id, False)
+
+
+# 是否开启私聊开关
+def is_private_switch_on(MODULE_NAME):
+    """
+    判断私聊开关是否开启，默认关闭
+    MODULE_NAME: 模块名称
+    返回值:
+    True: 开启
+    False: 关闭
+    """
+    switch = load_switch(MODULE_NAME)
+    return switch.get("private", False)
+
+
 # 切换群聊开关
 def toggle_group_switch(group_id, MODULE_NAME):
     try:

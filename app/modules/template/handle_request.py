@@ -62,9 +62,12 @@ class RequestHandler:
 
     async def handle(self):
         try:
+
             if self.request_type == "friend":
+                # 必要时可以这里可以引入好友请求开关检测
                 await self.handle_friend()
             elif self.request_type == "group":
+                # 必要时可以这里可以引入群聊请求开关检测
                 await self.handle_group()
             else:
                 logger.error(f"[{MODULE_NAME}]收到未知请求类型: {self.request_type}")

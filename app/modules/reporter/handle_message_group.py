@@ -1,6 +1,6 @@
 from . import *
 import logger
-from core.switchs import load_switch, toggle_group_switch
+from core.switchs import is_group_switch_on, toggle_group_switch
 from api.message import send_group_msg
 from api.generate import generate_reply_message, generate_text_message
 from datetime import datetime
@@ -47,7 +47,7 @@ class GroupMessageHandler:
                 return
 
             # 如果没开启群聊开关，则不处理
-            if not load_switch(MODULE_NAME)["group"].get(self.group_id, False):
+            if not is_group_switch_on(self.group_id, MODULE_NAME):
                 return
 
             # 测试消息

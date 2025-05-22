@@ -21,6 +21,8 @@ class MetaEventHandler:
 
     async def handle(self):
         try:
+            # 必要时可以这里可以引入群聊开关和私聊开关检测
+
             if self.post_type == "meta_event":
                 if self.meta_event_type == "lifecycle":
                     await self.handle_lifecycle()

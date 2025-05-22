@@ -1,6 +1,6 @@
 from . import *
 import logger
-from core.switchs import load_switch
+from core.switchs import is_private_switch_on
 
 
 class FriendNoticeHandler:
@@ -24,7 +24,7 @@ class FriendNoticeHandler:
         """
         try:
             # 如果没开启私聊开关，则不处理
-            if not load_switch(MODULE_NAME)["private"]:
+            if not is_private_switch_on(MODULE_NAME):
                 return
 
             if self.notice_type == "friend_add":

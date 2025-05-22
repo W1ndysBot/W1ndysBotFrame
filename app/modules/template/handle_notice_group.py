@@ -1,6 +1,7 @@
 from . import *
 import logger
-from core.switchs import load_switch
+from core.switchs import is_group_switch_on
+
 
 class GroupNoticeHandler:
     """
@@ -25,7 +26,7 @@ class GroupNoticeHandler:
         """
         try:
             # 如果没开启群聊开关，则不处理
-            if not load_switch(MODULE_NAME)["group"].get(self.group_id, False):
+            if not is_group_switch_on(self.group_id, MODULE_NAME):
                 return
 
             if self.notice_type == "group_admin":
