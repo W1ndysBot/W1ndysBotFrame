@@ -6,11 +6,9 @@
 ![GitHub license](https://img.shields.io/github/license/W1ndysBot/W1ndysBotFrame?style=flat-square)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/W1ndysBot/W1ndysBotFrame)
 
-## 项目正在重构阶段，可能不稳定！！！
-
 W1ndysBotFrame，一款基于 NapCat 和 Python 开发的机器人程序。
 
-本仓库可能更新不及时，如有需要，请参考 https://github.com/W1ndys/W1ndysBot 的最新更新
+本项目已发布 3.0 版本，经过了彻底重构，欢迎使用！如有任何问题，请提交 issue 或联系作者
 
 ## 📁 项目结构
 
