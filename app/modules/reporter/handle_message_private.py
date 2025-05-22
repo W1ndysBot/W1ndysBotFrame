@@ -59,7 +59,10 @@ class PrivateMessageHandler:
                     reply_message = generate_reply_message(self.message_id)
                     text_message = generate_text_message(f"[{MODULE_NAME}]测试成功")
                     await send_private_msg(
-                        self.websocket, self.user_id, [reply_message, text_message]
+                        self.websocket,
+                        self.user_id,
+                        [reply_message, text_message],
+                        note="del_msg_10",
                     )
                     return
 
