@@ -31,5 +31,8 @@ async def handle_events(websocket, msg):
                 if del_time > 0:
                     # 新开一个线程，定时撤回消息
                     asyncio.create_task(del_self_msg(websocket, msg_id, del_time))
+                    logger.info(
+                        f"自动撤回发送的消息: {msg_id} 将在 {del_time} 秒后撤回"
+                    )
     except Exception as e:
-        logger.error(f"自动撤回自己发送的消息失败: {e}")
+        logger.error(f"自动撤回发送的消息失败: {e}")

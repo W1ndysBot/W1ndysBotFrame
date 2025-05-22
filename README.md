@@ -23,6 +23,7 @@ app/
 │   └── group.py           # 群组管理接口
 ├── core/                   # 核心功能模块
 │   ├── auth.py            # 权限认证
+│   ├── auto_del_selfmsg.py # 自动撤回自己发送的消息
 │   ├── online_detect.py   # 在线检测
 │   └── switchs.py         # 开关管理
 ├── modules/               # 模块目录
