@@ -41,7 +41,7 @@ async def send_private_msg_with_cq(websocket, user_id, content):
         logger.error(f"[API]执行发送消息失败: {e}")
 
 
-async def send_group_msg(websocket, group_id, message):
+async def send_group_msg(websocket, group_id, message, note=""):
     """
     发送群聊消息，使用新的消息格式（消息段）
     {
@@ -65,7 +65,7 @@ async def send_group_msg(websocket, group_id, message):
                 "group_id": group_id,
                 "message": message,
             },
-            "echo": f"send_group_msg_{group_id}",
+            "echo": f"send_group_msg_{note}",
         }
         await websocket.send(json.dumps(message_data))
         logger.info(f"[API]已执行发送群聊消息到群 {group_id}")
@@ -73,7 +73,7 @@ async def send_group_msg(websocket, group_id, message):
         logger.error(f"[API]执行发送群聊消息失败: {e}")
 
 
-async def send_private_msg(websocket, user_id, message):
+async def send_private_msg(websocket, user_id, message, note=""):
     """
     发送私聊消息，使用新的消息格式（消息段）
     {
@@ -94,6 +94,7 @@ async def send_private_msg(websocket, user_id, message):
         message_data = {
             "action": "send_private_msg",
             "params": {"user_id": user_id, "message": message},
+            "echo": f"send_private_msg_{note}",
         }
         await websocket.send(json.dumps(message_data))
         logger.info(f"[API]已执行发送私聊消息到用户 {user_id}")
