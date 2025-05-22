@@ -4,8 +4,8 @@ import hashlib
 import base64
 import requests
 import json
-import os
-import logging
+import logger
+from config import FEISHU_BOT_URL, FEISHU_BOT_SECRET
 
 
 def feishu(title: str, content: str) -> dict:
@@ -21,16 +21,15 @@ def feishu(title: str, content: str) -> dict:
     Returns:
         dict: 接口返回结果
     """
-    # 环境变量
-    FEISHU_BOT_URL = os.environ.get("FEISHU_BOT_URL")
-    FEISHU_BOT_SECRET = os.environ.get("FEISHU_BOT_SECRET")
 
-    feishu_webhook = FEISHU_BOT_URL
-    feishu_secret = FEISHU_BOT_SECRET
+    if not FEISHU_BOT_URL or not FEISHU_BOT_SECRET:
+        logger.error(f"飞书webhook未配置")
+        return {"error": "飞书webhook未配置"}
+
     timestamp = str(int(time.time()))
 
     # 计算签名
-    string_to_sign = f"{timestamp}\n{feishu_secret}"
+    string_to_sign = f"{timestamp}\n{FEISHU_BOT_SECRET}"
     hmac_code = hmac.new(
         string_to_sign.encode("utf-8"), digestmod=hashlib.sha256
     ).digest()
@@ -56,12 +55,12 @@ def feishu(title: str, content: str) -> dict:
 
     # 发送请求
     try:
-        if not isinstance(feishu_webhook, str):
-            logging.error(f"飞书webhook未配置")
+        if not isinstance(FEISHU_BOT_URL, str):
+            logger.error(f"飞书webhook未配置")
             return {"error": "飞书webhook未配置"}
-        response = requests.post(feishu_webhook, headers=headers, data=json.dumps(msg))
-        logging.info(f"飞书发送通知消息成功🎉\n{response.json()}")
+        response = requests.post(FEISHU_BOT_URL, headers=headers, data=json.dumps(msg))
+        logger.info(f"飞书发送通知消息成功🎉\n{response.json()}")
         return response.json()
     except Exception as e:
-        logging.error(f"飞书发送通知消息失败😞\n{e}")
+        logger.error(f"飞书发送通知消息失败😞\n{e}")
         return {"error": str(e)}

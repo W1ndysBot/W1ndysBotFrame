@@ -5,7 +5,6 @@ from config import OWNER_ID
 from api.message import send_private_msg
 from utils.feishu import feishu
 import time
-import asyncio
 
 # 全局变量
 is_online = True  # 初始状态为在线
