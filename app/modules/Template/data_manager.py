@@ -17,4 +17,4 @@ class DataManager:
         """
         self.conn.close()
 
-    # 其他函数，注意需要在最后调用_close()以关闭数据库连接
+    # 其他函数，注意需要在最后调用_close()以关闭数据库连接，但要确保在所有操作完成后调用，否则会报错：Cannot operate on a closed cursor.
