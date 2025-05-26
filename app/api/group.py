@@ -14,6 +14,7 @@ async def set_group_kick(websocket, group_id, user_id, reject_add_request=False)
                 "user_id": user_id,
                 "reject_add_request": reject_add_request,
             },
+            "echo": "set_group_kick",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行设置群踢人")
@@ -31,6 +32,7 @@ async def set_group_ban(websocket, group_id, user_id, duration):
         payload = {
             "action": "set_group_ban",
             "params": {"group_id": group_id, "user_id": user_id, "duration": duration},
+            "echo": "set_group_ban",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行群禁言")
@@ -48,6 +50,7 @@ async def get_group_system_msg(websocket, group_id):
         payload = {
             "action": "get_group_system_msg",
             "params": {"group_id": group_id},
+            "echo": "get_group_system_msg",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群系统消息")
@@ -65,6 +68,7 @@ async def get_essence_msg_list(websocket, group_id):
         payload = {
             "action": "get_essence_msg_list",
             "params": {"group_id": group_id},
+            "echo": "get_essence_msg_list",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取精华消息")
@@ -82,6 +86,7 @@ async def set_group_whole_ban(websocket, group_id, enable):
         payload = {
             "action": "set_group_whole_ban",
             "params": {"group_id": group_id, "enable": enable},
+            "echo": "set_group_whole_ban",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行全体禁言")
@@ -99,6 +104,7 @@ async def set_group_portrait(websocket, group_id, file_path):
         payload = {
             "action": "set_group_portrait",
             "params": {"group_id": group_id, "file_path": file_path},
+            "echo": "set_group_portrait",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行设置群头像")
@@ -116,6 +122,7 @@ async def set_group_admin(websocket, group_id, user_id, enable):
         payload = {
             "action": "set_group_admin",
             "params": {"group_id": group_id, "user_id": user_id, "enable": enable},
+            "echo": "set_group_admin",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行设置群管理")
@@ -133,6 +140,7 @@ async def set_group_essence_msg(websocket, group_id, message_id):
         payload = {
             "action": "set_group_essence_msg",
             "params": {"group_id": group_id, "message_id": message_id},
+            "echo": "set_group_essence_msg",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行设置群精华消息")
@@ -150,6 +158,7 @@ async def set_group_card(websocket, group_id, user_id, card):
         payload = {
             "action": "set_group_card",
             "params": {"group_id": group_id, "user_id": user_id, "card": card},
+            "echo": "set_group_card",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行设置群成员名片")
@@ -167,6 +176,7 @@ async def delete_group_essence_msg(websocket, group_id, message_id):
         payload = {
             "action": "delete_group_essence_msg",
             "params": {"group_id": group_id, "message_id": message_id},
+            "echo": "delete_group_essence_msg",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行删除群精华消息")
@@ -184,6 +194,7 @@ async def set_group_name(websocket, group_id, group_name):
         payload = {
             "action": "set_group_name",
             "params": {"group_id": group_id, "group_name": group_name},
+            "echo": "set_group_name",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行设置群名")
@@ -198,7 +209,11 @@ async def set_group_leave(websocket, group_id):
     退群
     """
     try:
-        payload = {"action": "set_group_leave", "params": {"group_id": group_id}}
+        payload = {
+            "action": "set_group_leave",
+            "params": {"group_id": group_id},
+            "echo": "set_group_leave",
+        }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行退群")
         return True
@@ -219,6 +234,7 @@ async def _send_group_notice(websocket, group_id, content, image_path):
                 "content": content,
                 "image_path": image_path,
             },
+            "echo": "_send_group_notice",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行发送群公告")
@@ -233,7 +249,11 @@ async def _get_group_notice(websocket, group_id):
     获取群公告
     """
     try:
-        payload = {"action": "_get_group_notice", "params": {"group_id": group_id}}
+        payload = {
+            "action": "_get_group_notice",
+            "params": {"group_id": group_id},
+            "echo": "_get_group_notice",
+        }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群公告")
         return True
@@ -254,6 +274,7 @@ async def set_group_special_title(websocket, group_id, user_id, special_title):
                 "user_id": user_id,
                 "special_title": special_title,
             },
+            "echo": "set_group_special_title",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行设置群头衔")
@@ -276,6 +297,7 @@ async def upload_group_file(websocket, group_id, file, name, folder_id):
                 "name": name,
                 "folder_id": folder_id,
             },
+            "echo": "upload_group_file",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行上传群文件")
@@ -293,6 +315,7 @@ async def set_group_add_request(websocket, flag, approve, reason):
         payload = {
             "action": "set_group_add_request",
             "params": {"flag": flag, "approve": approve, "reason": reason},
+            "echo": "set_group_add_request",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行处理加群请求")
@@ -307,7 +330,11 @@ async def get_group_info(websocket, group_id):
     获取群信息
     """
     try:
-        payload = {"action": "get_group_info", "params": {"group_id": group_id}}
+        payload = {
+            "action": "get_group_info",
+            "params": {"group_id": group_id},
+            "echo": "get_group_info",
+        }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群信息")
         return True
@@ -321,7 +348,11 @@ async def get_group_info_ex(websocket, group_id):
     获取群信息
     """
     try:
-        payload = {"action": "get_group_info_ex", "params": {"group_id": group_id}}
+        payload = {
+            "action": "get_group_info_ex",
+            "params": {"group_id": group_id},
+            "echo": "get_group_info_ex",
+        }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群信息")
         return True
@@ -338,6 +369,7 @@ async def create_group_file_folder(websocket, group_id, folder_name):
         payload = {
             "action": "create_group_file_folder",
             "params": {"group_id": group_id, "folder_name": folder_name},
+            "echo": "create_group_file_folder",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行创建群文件夹")
@@ -355,6 +387,7 @@ async def delete_group_file(websocket, group_id, file_id):
         payload = {
             "action": "delete_group_file",
             "params": {"group_id": group_id, "file_id": file_id},
+            "echo": "delete_group_file",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行删除群文件")
@@ -372,6 +405,7 @@ async def delete_group_folder(websocket, group_id, folder_id):
         payload = {
             "action": "delete_group_folder",
             "params": {"group_id": group_id, "folder_id": folder_id},
+            "echo": "delete_group_folder",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行删除群文件夹")
@@ -389,6 +423,7 @@ async def get_group_file_system_info(websocket, group_id):
         payload = {
             "action": "get_group_file_system_info",
             "params": {"group_id": group_id},
+            "echo": "get_group_file_system_info",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群文件系统信息")
@@ -403,7 +438,11 @@ async def get_group_root_files(websocket, group_id):
     获取群根目录文件列表
     """
     try:
-        payload = {"action": "get_group_root_files", "params": {"group_id": group_id}}
+        payload = {
+            "action": "get_group_root_files",
+            "params": {"group_id": group_id},
+            "echo": "get_group_root_files",
+        }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群根目录文件列表")
         return True
@@ -424,6 +463,7 @@ async def get_group_files_by_folder(websocket, group_id, folder_id, file_count):
                 "folder_id": folder_id,
                 "file_count": file_count,
             },
+            "echo": "get_group_files_by_folder",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群子目录文件列表")
@@ -441,6 +481,7 @@ async def get_group_file_url(websocket, group_id, file_id):
         payload = {
             "action": "get_group_file_url",
             "params": {"group_id": group_id, "file_id": file_id},
+            "echo": "get_group_file_url",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群文件资源链接")
@@ -455,7 +496,11 @@ async def get_group_list(websocket, no_cache):
     获取群列表
     """
     try:
-        payload = {"action": "get_group_list", "params": {"no_cache": no_cache}}
+        payload = {
+            "action": "get_group_list",
+            "params": {"no_cache": no_cache},
+            "echo": "get_group_list",
+        }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群列表")
         return True
@@ -472,6 +517,7 @@ async def get_group_member_info(websocket, group_id, user_id, no_cache):
         payload = {
             "action": "get_group_member_info",
             "params": {"group_id": group_id, "user_id": user_id, "no_cache": no_cache},
+            "echo": "get_group_member_info",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群成员信息")
@@ -503,7 +549,11 @@ async def get_group_honor_info(websocket, group_id):
     获取群荣誉信息
     """
     try:
-        payload = {"action": "get_group_honor_info", "params": {"group_id": group_id}}
+        payload = {
+            "action": "get_group_honor_info",
+            "params": {"group_id": group_id},
+            "echo": "get_group_honor_info",
+        }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群荣誉信息")
         return True
@@ -520,6 +570,7 @@ async def get_group_at_all_remain(websocket, group_id):
         payload = {
             "action": "get_group_at_all_remain",
             "params": {"group_id": group_id},
+            "echo": "get_group_at_all_remain",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群at剩余次数")
@@ -537,6 +588,7 @@ async def get_group_ignored_notifies(websocket, group_id):
         payload = {
             "action": "get_group_ignored_notifies",
             "params": {"group_id": group_id},
+            "echo": "get_group_ignored_notifies",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群过滤系统消息")
@@ -554,6 +606,7 @@ async def set_group_sign(websocket, group_id):
         payload = {
             "action": "set_group_sign",
             "params": {"group_id": group_id},
+            "echo": "set_group_sign",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行设置群打卡")
@@ -568,7 +621,11 @@ async def send_group_sign(websocket, group_id):
     发送群打卡
     """
     try:
-        payload = {"action": "send_group_sign", "params": {"group_id": group_id}}
+        payload = {
+            "action": "send_group_sign",
+            "params": {"group_id": group_id},
+            "echo": "send_group_sign",
+        }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行发送群打卡")
         return True
@@ -585,6 +642,7 @@ async def get_ai_characters(websocket, group_id, chat_type):
         payload = {
             "action": "get_ai_characters",
             "params": {"group_id": group_id, "chat_type": chat_type},
+            "echo": "get_ai_characters",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取ai语音人物")
@@ -606,6 +664,7 @@ async def send_group_ai_record(websocket, group_id, character_id, text):
                 "character_id": character_id,
                 "text": text,
             },
+            "echo": "send_group_ai_record",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行发送群ai语音")
@@ -623,6 +682,7 @@ async def get_ai_record(websocket, group_id, character, text):
         payload = {
             "action": "get_ai_record",
             "params": {"group_id": group_id, "character": character, "text": text},
+            "echo": "get_ai_record",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取ai语音")
