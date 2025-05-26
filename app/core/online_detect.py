@@ -1,5 +1,3 @@
-# app/core/online_detect.py
-
 import logger
 from config import OWNER_ID
 from api.message import send_private_msg
@@ -27,7 +25,7 @@ async def handle_events(websocket, message):
                 "%Y-%m-%d %H:%M:%S",
                 time.localtime(message.get("time", int(time.time()))),
             )
-            connect_msg = f"W1ndysGroupBot已上线！\n机器人ID: {message.get('self_id')}\n上线时间: {current_time}"
+            connect_msg = f"W1ndysBot-dev已上线！\n机器人ID: {message.get('self_id')}\n上线时间: {current_time}"
             logger.info(f"机器人首次连接: {connect_msg}")
 
             # 向管理员发送私聊消息
