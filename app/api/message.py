@@ -7,9 +7,9 @@ import logger
 async def send_group_msg_with_cq(websocket, group_id, content, note=""):
     """
     发送群消息，使用旧的消息格式（cq码）
-    如需自动撤回，请在note参数中添加“del_msg_秒数”
-    如：del_msg_10
-    则note参数为：del_msg_10
+    如需自动撤回，请在note参数中添加“del_msg=秒数”
+    如：del_msg=10
+    则note参数为：del_msg=10
     https://napcat.apifox.cn/226799128e0
     """
     try:
@@ -28,9 +28,9 @@ async def send_group_msg_with_cq(websocket, group_id, content, note=""):
 async def send_private_msg_with_cq(websocket, user_id, content, note=""):
     """
     发送私聊消息，使用旧的消息格式（cq码）
-    如需自动撤回，请在note参数中添加“del_msg_秒数”
-    如：del_msg_10
-    则note参数为：del_msg_10
+    如需自动撤回，请在note参数中添加“del_msg=秒数”
+    如：del_msg=10
+    则note参数为：del_msg=10
     https://napcat.apifox.cn/226799128e0
     """
     try:
@@ -53,9 +53,9 @@ async def send_group_msg(websocket, group_id, message, note=""):
         "data": {"text": "消息内容"}
     }
     消息段可使用generate模块的函数生成
-    如需自动撤回，请在note参数中添加“del_msg_秒数”
-    如：del_msg_10
-    则note参数为：del_msg_10
+    如需自动撤回，请在note参数中添加“del_msg=秒数”
+    如：del_msg=10
+    则note参数为：del_msg=10
     https://napcat.apifox.cn/226799128e0
     """
     try:
@@ -89,9 +89,9 @@ async def send_private_msg(websocket, user_id, message, note=""):
         "data": {"text": "消息内容"}
     }
     消息段可使用generate模块的函数生成
-    如需自动撤回，请在note参数中添加“del_msg_秒数”
-    如：del_msg_10
-    则note参数为：del_msg_10
+    如需自动撤回，请在note参数中添加“del_msg=秒数”
+    如：del_msg=10
+    则note参数为：del_msg=10
     https://napcat.apifox.cn/226799128e0
     """
     try:
