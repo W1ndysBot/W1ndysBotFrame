@@ -16,7 +16,7 @@ async def send_group_msg_with_cq(websocket, group_id, content, note=""):
         payload = {
             "action": "send_group_msg",
             "params": {"group_id": group_id, "message": content},
-            "echo": f"send_group_msg_{note}",
+            "echo": f"send_group_msg-{note}",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行发送群消息到群 {group_id}")
@@ -37,7 +37,7 @@ async def send_private_msg_with_cq(websocket, user_id, content, note=""):
         payload = {
             "action": "send_private_msg",
             "params": {"user_id": user_id, "message": content},
-            "echo": f"send_private_msg_{note}",
+            "echo": f"send_private_msg-{note}",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行发送消息到用户 {user_id}")
@@ -73,7 +73,7 @@ async def send_group_msg(websocket, group_id, message, note=""):
                 "group_id": group_id,
                 "message": message,
             },
-            "echo": f"send_group_msg_{note}",
+            "echo": f"send_group_msg-{note}",
         }
         await websocket.send(json.dumps(message_data))
         logger.info(f"[API]已执行发送群聊消息到群 {group_id}")
@@ -106,7 +106,7 @@ async def send_private_msg(websocket, user_id, message, note=""):
         message_data = {
             "action": "send_private_msg",
             "params": {"user_id": user_id, "message": message},
-            "echo": f"send_private_msg_{note}",
+            "echo": f"send_private_msg-{note}",
         }
         await websocket.send(json.dumps(message_data))
         logger.info(f"[API]已执行发送私聊消息到用户 {user_id}")
@@ -253,7 +253,7 @@ async def get_group_msg_history(
                 "count": count,
                 "reverseOrder": True,
             },
-            "echo": f"get_group_msg_history_{group_id}_{user_id}_{note}",
+            "echo": f"get_group_msg_history-{group_id}-{user_id}-{note}",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取群历史消息")
@@ -347,7 +347,7 @@ async def get_forward_msg(websocket, message_id, note=""):
         payload = {
             "action": "get_forward_msg",
             "params": {"message_id": message_id},
-            "echo": f"get_forward_msg_{note}",
+            "echo": f"get_forward_msg-{note}",
         }
         await websocket.send(json.dumps(payload))
         logger.info(f"[API]已执行获取合并转发消息")
