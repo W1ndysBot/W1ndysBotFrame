@@ -56,7 +56,7 @@ app/
 - ⏰ 支持定时任务
 - 🔄 支持自动撤回自己发送的消息
 - 📨 支持私聊转达到`OWNER`管理员
-- 📝 支持日志记录，自动清理 7 天前的日志(可以在app/utils/clean_logs.py中修改)
+- 📝 支持日志记录，自动清理 7 天前的日志(可以在 app/utils/clean_logs.py 中修改)
 - 🧩 功能模块可以独立开发和管理
 
 ## 🛠️ 开发说明
@@ -64,6 +64,7 @@ app/
 - 新功能开发请参考 `app/modules/template` 目录的示例
 - 数据存储请在 `app/data` 下创建对应目录，使用`os.path.join("data", "其他目录", "文件名")` 获取路径
 - 如需定时撤回消息，请在[发送消息 API](https://github.com/W1ndysBot/W1ndysBotFrame/blob/main/app/api/message.py) 的`note`参数中传入`del_msg=秒数`，例如`del_msg=10`
+- 获取 rkey 的实现在`app/core/nc_get_rkey.py`中，框架会每 10 分钟请求一次，获取 rkey 并保存到`app/data/Core/nc_get_rkey.json`中
 
 ## ⚙️ 配置说明
 
