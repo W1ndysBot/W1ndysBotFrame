@@ -3,10 +3,39 @@ import colorlog
 import os
 from datetime import datetime, timezone, timedelta
 from logging.handlers import RotatingFileHandler
+from config import LOG_LEVEL
+
+
+# 自定义SUCCESS日志级别 (在INFO和WARNING之间)
+SUCCESS = 25  # INFO是20，WARNING是30
+logging.addLevelName(SUCCESS, "SUCCESS")
+
+# 添加success方法到logging模块
+
+
+def _logger_success(self, message, *args, **kwargs):
+    if self.isEnabledFor(SUCCESS):
+        self._log(SUCCESS, message, args, **kwargs)
+
+
+# 自定义NAPCAT日志级别 (在INFO和WARNING之间)
+NAPCAT = 26  # INFO是20，WARNING是30
+logging.addLevelName(NAPCAT, "NAPCAT")
+
+
+# 添加napcat方法到logging模块
+def _logger_napcat(self, message, *args, **kwargs):
+    if self.isEnabledFor(NAPCAT):
+        self._log(NAPCAT, message, args, **kwargs)
+
+
+# 将success方法添加到Logger类 - 使用setattr避免类型检查问题
+setattr(logging.Logger, "success", _logger_success)
+setattr(logging.Logger, "napcat", _logger_napcat)
 
 
 class Logger:
-    def __init__(self, logs_dir="logs", level=logging.INFO):
+    def __init__(self, logs_dir="logs", level=LOG_LEVEL):
         self.root_logger = logging.getLogger()
         self.level = level
 
@@ -23,11 +52,8 @@ class Logger:
         # 清除之前的处理器
         self.root_logger.handlers = []
 
-        # 创建控制台处理器
-        console_handler = self._create_console_handler()
-
-        # 创建文件处理器
-        file_handler = self._create_file_handler()
+        # 创建控制台和文件处理器
+        console_handler, file_handler = self._create_handlers()
 
         # 设置根日志记录器的级别和处理器
         self.root_logger.setLevel(self.level)
@@ -38,31 +64,36 @@ class Logger:
         for handler in self.root_logger.handlers:
             handler.flush()
 
-        self.info(f"初始化日志器，日志文件名: {self.log_filename}")
+        self.success(f"初始化日志器，日志文件名: {self.log_filename}")
 
         return self.log_filename
 
-    def _create_console_handler(self):
-        """创建控制台处理器"""
-        handler = colorlog.StreamHandler()
-        handler.setFormatter(
+    def _create_handlers(self):
+        """创建控制台和文件处理器"""
+        # 通用配置
+        date_format = "%Y-%m-%d %H:%M:%S"
+        log_colors = {
+            "DEBUG": "cyan",  # 调试信息（青色）
+            "INFO": "white",  # 普通信息（白色）
+            "WARNING": "yellow",  # 警告信息（黄色）
+            "ERROR": "red",  # 错误信息（红色）
+            "CRITICAL": "bold_red",  # 严重错误（加粗红色）
+            "SUCCESS": "green",  # 发送成功（绿色）
+            "NAPCAT": "bold_blue",  # 接收NapCatQQ的消息日志（加粗蓝色）
+        }
+
+        # 创建控制台处理器
+        console_handler = colorlog.StreamHandler()
+        console_handler.setFormatter(
             colorlog.ColoredFormatter(
-                "%(log_color)s%(asctime)s %(levelname)s:\n%(message)s\n",
-                datefmt="%Y-%m-%d %H:%M:%S",
-                log_colors={
-                    "DEBUG": "cyan",
-                    "INFO": "light_green",
-                    "WARNING": "yellow",
-                    "ERROR": "red",
-                    "CRITICAL": "red,bg_white",
-                },
+                "%(log_color)s%(asctime)s [%(levelname)s]: %(message)s",
+                datefmt=date_format,
+                log_colors=log_colors,
             )
         )
-        handler.setLevel(self.level)
-        return handler
+        console_handler.setLevel(self.level)
 
-    def _create_file_handler(self):
-        """创建文件处理器"""
+        # 创建文件处理器
         # 创建 logs 目录
         if not os.path.exists(self.logs_dir):
             os.makedirs(self.logs_dir)
@@ -78,8 +109,7 @@ class Logger:
         )
         file_handler.setFormatter(
             logging.Formatter(
-                "%(asctime)s %(levelname)s:\n%(message)s\n",
-                datefmt="%Y-%m-%d %H:%M:%S",
+                "%(asctime)s [%(levelname)s]: %(message)s", datefmt=date_format
             )
         )
         file_handler.namer = lambda name: name.replace(
@@ -87,7 +117,8 @@ class Logger:
         )
         file_handler.rotator = lambda source, dest: os.rename(source, dest)
         file_handler.setLevel(self.level)
-        return file_handler
+
+        return console_handler, file_handler
 
     # 便捷日志方法
     def debug(self, message):
@@ -104,6 +135,12 @@ class Logger:
 
     def critical(self, message):
         logging.critical(message)
+
+    def success(self, message):
+        logging.log(SUCCESS, message)
+
+    def napcat(self, message):
+        logging.log(NAPCAT, message)
 
     def set_level(self, level):
         """动态设置日志级别"""
@@ -138,6 +175,14 @@ def critical(message):
     logger.critical(message)
 
 
+def success(message):
+    logger.success(message)
+
+
+def napcat(message):
+    logger.napcat(message)
+
+
 if __name__ == "__main__":
     # 演示logger的使用方法
 
@@ -147,13 +192,16 @@ if __name__ == "__main__":
     logger.warning("这是一条警告日志")
     logger.error("这是一条错误日志")
     logger.critical("这是一条严重错误日志")
-
+    logger.success("这是一条成功日志")
+    logger.napcat("这是一条Napcat信息日志")
     # 2. 使用便捷函数
     debug("使用便捷函数：调试信息")
     info("使用便捷函数：普通信息")
     warning("使用便捷函数：警告信息")
     error("使用便捷函数：错误信息")
     critical("使用便捷函数：严重错误")
+    success("使用便捷函数：成功信息")
+    napcat("使用便捷函数：Napcat信息")
 
     # 3. 修改日志级别
     print("\n修改日志级别为DEBUG后的输出:")
@@ -161,5 +209,5 @@ if __name__ == "__main__":
     logger.debug("修改级别后可以看到的调试日志")
 
     # 4. 创建自定义日志实例
-    custom_logger = Logger(logs_dir="custom_logs", level=logging.DEBUG)
+    custom_logger = Logger(logs_dir="custom_logs", level=LOG_LEVEL)
     custom_logger.info("这是来自自定义日志器的消息")
