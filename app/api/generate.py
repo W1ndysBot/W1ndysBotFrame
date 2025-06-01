@@ -70,47 +70,56 @@ def generate_face_message(face_id):
     return {"type": "face", "data": {"id": face_id}}
 
 
-def generate_image_message(file, type="file", cache=True, proxy=True, timeout=None):
+def generate_image_message(file, type="base64", cache=True, proxy=True, timeout=None):
     """
     生成图片消息
 
-    Args:
+    参数:
         file (str): 图片文件路径、URL或Base64编码
         type (str): 图片类型，可选值:
-            - file: 本地文件路径
-            - url: 网络图片URL
-            - base64: Base64编码的图片数据
+            - file: 本地文件路径（如 D:/a.jpg）
+            - url: 网络图片URL（如 http://xxx/xxx.png）
+            - base64: Base64编码的图片数据（如 xxxxxxxx）
         cache (bool): 是否使用已缓存的文件
         proxy (bool): 是否通过代理下载文件
         timeout (int): 下载文件的超时时间(秒)
 
-    Returns:
+    返回:
         dict: 包含图片消息段的字典，格式为:
         {
             "type": "image",
             "data": {
-                "file": file,
-                "type": type,
+                "file": "file://D:/a.jpg" 或 "http://xxx/xxx.png" 或 "base64://xxxxxx",
                 "cache": cache,
                 "proxy": proxy,
                 "timeout": timeout
             }
         }
 
-    Note:
+    说明:
         - 支持发送本地图片、网络图片和Base64编码的图片
+        - 本地图片需加前缀 file://，Base64需加前缀 base64://
         - 图片大小限制为10MB
         - 建议使用cache=True提高发送效率
     """
+    # 自动处理file前缀
+    if type == "file":
+        if not file.startswith("file://"):
+            file = f"file://{file}"
+    elif type == "base64":
+        if not file.startswith("base64://"):
+            file = f"base64://{file}"
+    # 网络图片直接使用URL，无需前缀
+    # 组装data字典
+    data = {
+        "file": file,
+        "cache": cache,
+        "proxy": proxy,
+        "timeout": timeout,
+    }
     return {
         "type": "image",
-        "data": {
-            "file": file,
-            "type": type,
-            "cache": cache,
-            "proxy": proxy,
-            "timeout": timeout,
-        },
+        "data": data,
     }
 
 
@@ -266,4 +275,34 @@ def generate_share_message(url, title, content="", image=""):
     return {
         "type": "share",
         "data": {"url": url, "title": title, "content": content, "image": image},
+    }
+
+
+def generate_node_message(user_id, nickname, content):
+    """
+    生成合并转发消息
+
+    Args:
+        user_id (int): 用户ID
+        nickname (str): 昵称
+        content (str): 内容
+
+    Returns:
+        dict: 包含合并转发消息段的字典，格式为:
+        {
+            "type": "node",
+            "data": {
+                "user_id": user_id,
+                "nickname": nickname,
+                "content": content
+            }
+        }
+
+    Note:
+        - 支持发送合并转发消息
+        - 可以自定义用户ID、昵称和内容
+    """
+    return {
+        "type": "node",
+        "data": {"user_id": user_id, "nickname": nickname, "content": content},
     }
