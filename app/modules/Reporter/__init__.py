@@ -4,7 +4,7 @@ import os
 MODULE_NAME = "Reporter"
 
 # 模块开关名称
-SWITCH_NAME = "reporter"
+SWITCH_NAME = "rp"
 
 # 模块描述
 MODULE_DESCRIPTION = "主要用于把私聊bot、加bot为好友，邀请bot入群等操作的通知报告"
@@ -16,7 +16,5 @@ os.makedirs(DATA_DIR, exist_ok=True)
 
 # 模块的一些命令可以在这里定义，方便在其他地方调用，提高代码的复用率
 # ------------------------------------------------------------
-# COMMANDS1 = "命令1"
-# COMMANDS2 = "命令2"
-# COMMANDS3 = "命令3"
+TEST_COMMAND = "测试"
 # ------------------------------------------------------------
