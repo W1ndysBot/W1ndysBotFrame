@@ -1,7 +1,10 @@
 #!/bin/bash
-dos2unix "$0"
-# 进入当前目录的app目录
-cd "$(dirname "$0")/app"
+# 进入当前目录
+cd "$(dirname "$0")"
+# 进入上一级目录
+cd ..
+# 进入app目录
+cd app
 
 # 激活虚拟环境
 source "../venv/bin/activate"

@@ -1,7 +1,9 @@
 #!/bin/bash
-dos2unix "$0"
-# 进入当前目录的app目录
-cd "$(dirname "$0")/app"
+cd "$(dirname "$0")"
+cd ..
+
+# 进入app目录
+cd app
 
 # 检查应用是否正在运行
 if [ -f "app.pid" ]; then

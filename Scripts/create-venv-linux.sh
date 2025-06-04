@@ -1,4 +1,6 @@
 #!/bin/bash
+cd "$(dirname "$0")"
+cd ..
 
 # 检查Python是否安装
 if ! which python3 > /dev/null 2>&1

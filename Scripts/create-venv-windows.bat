@@ -1,5 +1,7 @@
 @echo off
 chcp 65001
+cd /d %~dp0
+cd ..
 
 :: 检查Python是否安装
 where python >nul 2>nul

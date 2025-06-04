@@ -1,5 +1,7 @@
 @echo off
 chcp 65001
+cd /d %~dp0
+cd ..
 
 :: 检查Python虚拟环境是否存在
 IF EXIST venv\Scripts\activate (
