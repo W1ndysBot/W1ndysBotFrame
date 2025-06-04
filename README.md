@@ -10,38 +10,6 @@ W1ndysBotFrame，一款基于 NapCat 和 Python 开发的机器人程序。
 
 本项目已发布 3.0 版本，经过了彻底重构，欢迎使用！如有任何问题，请提交 issue 或联系作者
 
-## 📁 项目结构
-
-```
-app/
-├── api/                    # API 接口模块
-│   ├── user.py            # 用户相关接口
-│   ├── message.py         # 消息处理接口
-│   ├── generate.py        # 生成相关接口
-│   └── group.py           # 群组管理接口
-├── core/                   # 核心功能模块
-│   ├── auth.py            # 权限认证
-│   ├── del_self_msg.py # 自动撤回自己发送的消息
-│   ├── online_detect.py   # 在线检测
-│   └── switchs.py         # 开关管理
-├── modules/               # 模块目录
-│   └── template/          # 模板模块
-│       ├── main.py              # 主程序入口
-│       ├── handle_message.py   # 消息处理器
-│       ├── handle_notice.py    # 通知处理器
-│       ├── handle_request.py   # 请求处理器
-│       ├── handle_response.py  # 响应处理器
-│       └── README.md           # 说明文档
-├── utils/                   # 工具函数模块
-│   ├── feishu.py            # 飞书集成
-│   └── logs_clean.py        # 日志清理
-├── bot.py                 # 机器人主程序
-├── handle_events.py      # 事件处理器
-├── main.py               # 程序入口
-├── logger.py             # 日志系统
-└── config.py             # 配置文件
-```
-
 ## 流程图
 
 在这里->[流程图](./docs/flow_diagram.md)
@@ -57,7 +25,7 @@ app/
 - 🔄 支持自动撤回自己发送的消息
 - 📨 支持私聊转达到`OWNER`管理员
 - 📝 支持日志记录，自动清理 7 天前的日志(可以在 app/utils/clean_logs.py 中修改)
-- 🧩 功能模块可以独立开发和管理
+- 🧩 提供了示例模块，功能模块可以独立开发和管理
 
 ## 🛠️ 开发说明
 
