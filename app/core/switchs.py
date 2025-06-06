@@ -15,7 +15,6 @@
 import os
 import json
 import logger
-from core.auth import is_system_owner
 from api.generate import generate_reply_message, generate_text_message
 from api.message import send_private_msg, send_group_msg
 
