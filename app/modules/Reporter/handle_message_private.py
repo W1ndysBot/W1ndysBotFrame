@@ -53,6 +53,10 @@ class PrivateMessageHandler:
         """
         try:
             if self.raw_message.lower() == SWITCH_NAME.lower():
+                # 鉴权
+                if not is_system_owner(self.user_id):
+                    logger.error(f"[{MODULE_NAME}]{self.user_id}无权限切换私聊开关")
+                    return
                 await handle_module_private_switch(
                     MODULE_NAME, self.websocket, self.user_id, self.message_id
                 )

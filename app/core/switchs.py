@@ -68,12 +68,8 @@ def toggle_group_switch(group_id, MODULE_NAME):
 
 
 # 切换私聊开关
-def toggle_private_switch(MODULE_NAME, user_id):
+def toggle_private_switch(MODULE_NAME):
     try:
-        # 鉴权
-        if not is_system_owner(user_id):
-            logger.error(f"[{MODULE_NAME}]{user_id}无权限切换私聊开关")
-            return False
         switch_status = toggle_switch(switch_type="private", MODULE_NAME=MODULE_NAME)
         logger.info(f"[{MODULE_NAME}]私聊开关已切换为【{switch_status}】")
         return switch_status
@@ -184,7 +180,7 @@ async def handle_module_private_switch(MODULE_NAME, websocket, user_id, message_
     处理模块私聊开关命令
     """
     try:
-        switch_status = toggle_private_switch(MODULE_NAME, user_id)
+        switch_status = toggle_private_switch(MODULE_NAME)
         switch_status = "开启" if switch_status else "关闭"
         reply_message = generate_reply_message(message_id)
         text_message = generate_text_message(
