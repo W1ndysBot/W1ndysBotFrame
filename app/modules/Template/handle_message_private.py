@@ -1,7 +1,9 @@
-from . import MODULE_NAME, SWITCH_NAME, MENU_COMMAND
+from . import MODULE_NAME, SWITCH_NAME
+from core.menu_manager import MENU_COMMAND
 import logger
 from core.switchs import is_private_switch_on, handle_module_private_switch
 from api.message import send_private_msg
+from api.generate import generate_text_message, generate_reply_message
 from datetime import datetime
 from .data_manager import DataManager
 from core.auth import is_system_owner
@@ -50,7 +52,10 @@ class PrivateMessageHandler:
                 await send_private_msg(
                     self.websocket,
                     self.user_id,
-                    [menu_text],
+                    [
+                        generate_reply_message(self.message_id),
+                        generate_text_message(menu_text),
+                    ],
                     note="del_msg=30",
                 )
                 return

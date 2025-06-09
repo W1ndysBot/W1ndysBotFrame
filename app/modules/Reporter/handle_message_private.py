@@ -1,4 +1,5 @@
-from . import MODULE_NAME, SWITCH_NAME, MENU_COMMAND
+from . import MODULE_NAME, SWITCH_NAME
+from core.menu_manager import MENU_COMMAND
 import logger
 from core.auth import is_system_owner
 from core.switchs import is_private_switch_on, handle_module_private_switch
@@ -52,7 +53,10 @@ class PrivateMessageHandler:
                 await send_private_msg(
                     self.websocket,
                     self.user_id,
-                    [menu_text],
+                    [
+                        generate_reply_message(self.message_id),
+                        generate_text_message(menu_text),
+                    ],
                     note="del_msg=30",
                 )
                 return
@@ -114,10 +118,10 @@ class PrivateMessageHandler:
                     return
             # 普通消息转发给owner
             else:
-                message = f"[{MODULE_NAME}]收到私聊消息\n"
-                message += f"用户ID: {self.user_id}\n"
-                message += f"消息内容: {self.raw_message}\n"
-                message += f"发送时间: {self.formatted_time}"
+                message = f"用户ID🆔：{self.user_id}\n"
+                message += f"发送时间：{self.formatted_time}\n"
+                message += "————————————————————\n"
+                message += f"{self.raw_message}"
                 message = generate_text_message(message)
                 await send_private_msg(
                     self.websocket,

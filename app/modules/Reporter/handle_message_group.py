@@ -1,4 +1,5 @@
-from . import MODULE_NAME, SWITCH_NAME, TEST_COMMAND, MENU_COMMAND
+from . import MODULE_NAME, SWITCH_NAME, TEST_COMMAND
+from core.menu_manager import MENU_COMMAND
 import logger
 from core.switchs import is_group_switch_on, handle_module_group_switch
 from api.message import send_group_msg, send_forward_msg
@@ -56,7 +57,10 @@ class GroupMessageHandler:
                 await send_group_msg(
                     self.websocket,
                     self.group_id,
-                    [menu_text],
+                    [
+                        generate_reply_message(self.message_id),
+                        generate_text_message(menu_text),
+                    ],
                     note="del_msg=30",
                 )
                 return
