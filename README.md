@@ -36,7 +36,7 @@ W1ndysBotFrame，一款基于 NapCat 和 Python 开发的机器人程序。
 
 ## ⚙️ 配置说明
 
-在 `.env.example` 中配置系统变量，完成配置后，删除`.example`后缀，`app/config.py`文件会从这里读取环境变量:
+在 `app/.env.example` 中配置系统变量，完成配置后，删除`.example`后缀，`app/config.py`文件会从这里读取环境变量:
 
 配置项说明
 
