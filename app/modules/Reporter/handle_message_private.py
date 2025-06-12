@@ -4,12 +4,13 @@ import logger
 from core.auth import is_system_admin
 from core.switchs import is_private_switch_on, handle_module_private_switch
 from config import OWNER_ID
-from api.message import send_private_msg
+from api.message import send_private_msg, send_private_msg_with_cq
 from api.user import set_friend_add_request, set_group_add_request
 from api.generate import generate_reply_message, generate_text_message
 import re
 from datetime import datetime
 from core.menu_manager import MenuManager
+import asyncio
 
 
 class PrivateMessageHandler:
@@ -29,6 +30,7 @@ class PrivateMessageHandler:
         self.raw_message = msg.get("raw_message", "")  # 原始消息
         self.sender = msg.get("sender", {})  # 发送者信息
         self.nickname = self.sender.get("nickname", "")  # 昵称
+        self.group_id = str(msg.get("group_id", ""))  # 群号
 
     async def handle(self):
         """
@@ -37,7 +39,7 @@ class PrivateMessageHandler:
         try:
             if self.raw_message.lower() == SWITCH_NAME.lower():
                 # 鉴权
-                if not is_system_owner(self.user_id):
+                if not is_system_admin(self.user_id):
                     return
                 await handle_module_private_switch(
                     MODULE_NAME,
@@ -48,7 +50,7 @@ class PrivateMessageHandler:
                 return
 
             # 处理菜单命令（无视开关状态）
-            if self.raw_message.lower() == (SWITCH_NAME + MENU_COMMAND).lower():
+            if self.raw_message.lower() == f"{SWITCH_NAME}{MENU_COMMAND}".lower():
                 menu_text = MenuManager.get_module_commands_text(MODULE_NAME)
                 await send_private_msg(
                     self.websocket,
@@ -66,7 +68,7 @@ class PrivateMessageHandler:
                 return
 
             # 鉴权
-            if is_system_owner(self.user_id):
+            if is_system_admin(self.user_id):
 
                 # 处理测试消息
                 if self.raw_message.lower() in ["测试", "test"]:
@@ -118,15 +120,33 @@ class PrivateMessageHandler:
                     return
             # 普通消息转发给owner
             else:
-                message = f"用户ID🆔：{self.user_id}\n"
-                message += f"发送时间：{self.formatted_time}\n"
-                message += "————————————————————\n"
-                message += f"{self.raw_message}"
-                message = generate_text_message(message)
+                # 定义需要忽略的消息正则表达式
+                ignore_patterns = [
+                    r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"  # UUID格式
+                ]
+
+                # 检查消息是否包含任何忽略模式
+                if any(
+                    re.search(pattern, self.raw_message) for pattern in ignore_patterns
+                ):
+                    return
+
                 await send_private_msg(
                     self.websocket,
                     OWNER_ID,
-                    [message],
+                    [
+                        generate_text_message(
+                            f"用户ID🆔：{self.user_id}\n"
+                            f"发送时间：{self.formatted_time}\n"
+                            f"昵称：{self.nickname}\n"
+                            f"来源群号：{self.group_id if self.group_id else '无'}\n"
+                            f"消息内容见下条消息"
+                        )
+                    ],
+                )
+                await asyncio.sleep(0.4)
+                await send_private_msg_with_cq(
+                    self.websocket, OWNER_ID, self.raw_message
                 )
                 return
 
