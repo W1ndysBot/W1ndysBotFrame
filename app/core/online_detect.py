@@ -1,7 +1,7 @@
 import logger
 from config import OWNER_ID
 from api.message import send_private_msg
-from utils.feishu import feishu
+from utils.feishu import send_feishu_msg
 import time
 
 # 全局变量
@@ -26,7 +26,9 @@ async def handle_events(websocket, message):
                 time.localtime(message.get("time", int(time.time()))),
             )
             connect_msg = f"W1ndysBot-dev已上线！\n机器人ID: {message.get('self_id')}\n管理员ID: {OWNER_ID}\n上线时间: {current_time}"
-            logger.success(f"机器人连接成功")
+            logger.success(
+                f"机器人连接成功，当前在线状态: {is_online}，心跳间隔: {message.get('interval', 0)/1000}秒，机器人ID: {message.get('self_id')}，管理员ID: {OWNER_ID}"
+            )
 
             # 向管理员发送私聊消息
             try:
@@ -70,7 +72,7 @@ async def handle_events(websocket, message):
             logger.success(f"机器人状态变更: {status_text}")
             try:
                 # 发送飞书通知
-                feishu_result = feishu(title, content)
+                feishu_result = send_feishu_msg(title, content)
                 if "error" in feishu_result:
                     logger.error(f"发送飞书通知失败: {feishu_result.get('error')}")
 
