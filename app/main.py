@@ -10,6 +10,7 @@ def verify_config():
     # 判断 .env.example 文件是否存在
     if os.path.exists(".env.example"):
         logger.error("请在完成 .env.example 文件配置后，删除.example后缀")
+        exit()
 
     """验证配置是否正确"""
     if not OWNER_ID:
