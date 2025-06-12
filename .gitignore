@@ -16,7 +16,8 @@ venv/
 # 忽略.cursor文件夹
 .cursor/
 
-
+# 偷懒脚本
+git_push.sh
 
 
 # Byte-compiled / optimized / DLL files
