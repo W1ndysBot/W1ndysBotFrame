@@ -10,6 +10,20 @@ W1ndysBotFrame，一款基于 NapCat 和 Python 开发的机器人程序。
 
 本项目已发布 3.0 版本，经过了彻底重构，欢迎使用！如有任何问题，请提交 issue 或联系作者
 
+## 食用/部署（⚙️ 配置说明）
+
+在 `app/.env.example` 中配置系统变量，完成配置后，删除`.example`后缀，`app/config.py`文件会从这里读取环境变量:
+
+配置项说明
+
+- `OWNER_ID`: 机器人管理员 QQ 号
+- `WS_URL`: WebSocket 连接地址
+- `TOKEN`: 认证 token(可选)
+- `FEISHU_BOT_URL`: 飞书机器人 URL(可选)
+- `FEISHU_BOT_SECRET`: 飞书机器人 Secret(可选)
+
+配置后，运行`app/main.py`
+
 ## 流程图
 
 在这里->[流程图](./docs/flow_diagram.md)
@@ -33,16 +47,6 @@ W1ndysBotFrame，一款基于 NapCat 和 Python 开发的机器人程序。
 - 数据存储请在 `app/data` 下创建对应目录，使用`os.path.join("data", "其他目录", "文件名")` 获取路径
 - 如需定时撤回消息，请在[发送消息 API](https://github.com/W1ndysBot/W1ndysBotFrame/blob/main/app/api/message.py) 的`note`参数中传入`del_msg=秒数`，例如`del_msg=10`
 - 获取 rkey 的实现在`app/core/nc_get_rkey.py`中，框架会每 10 分钟请求一次，获取 rkey 并保存到`app/data/Core/nc_get_rkey.json`中
-
-## ⚙️ 配置说明
-
-在 `app/config.py` 中配置:
-
-- `OWNER_ID`: 机器人管理员 QQ 号
-- `WS_URL`: WebSocket 连接地址
-- `TOKEN`: 认证 token(可选)
-- `FEISHU_BOT_URL`: 飞书机器人 URL(可选)
-- `FEISHU_BOT_SECRET`: 飞书机器人 Secret(可选)
 
 ## 更新方法
 
