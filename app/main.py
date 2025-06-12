@@ -7,9 +7,9 @@ from config import OWNER_ID, WS_URL, TOKEN, FEISHU_BOT_URL, FEISHU_BOT_SECRET
 
 
 def verify_config():
-    # 判断 .env.example 文件是否存在
-    if os.path.exists(".env.example"):
-        logger.error("请在完成 .env.example 文件配置后，删除.example后缀")
+    # 如果.env文件不存在，则提示用户
+    if not os.path.exists(".env"):
+        logger.error("请在完成 .env 文件配置后，删除.example后缀")
         exit()
 
     """验证配置是否正确"""
