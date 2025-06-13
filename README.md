@@ -43,7 +43,8 @@ W1ndysBotFrame，一款基于 NapCat 和 Python 开发的机器人程序。
 
 ## 🛠️ 开发说明
 
-- 新功能开发请参考 `app/modules/template` 目录的示例
+新功能开发请参考 `app/modules/Template` 目录的示例，如需为社区提供功能，请在你自己的仓库中创建一个模块，命名为`W1ndysBotFrame-Module-<功能名>`，以便于框架用户可以快速搜索到你的模块，如需基于本框架完全开发，则可以直接 fork 本项目所有文件基于示例模块开发即可，开源协议为 [GPL-3.0](LICENSE)，请注意遵守开源协议，禁止将本项目用于非法用途，本项目仅用于学习交流。
+
 - 数据存储请在 `app/data` 下创建对应目录，使用`os.path.join("data", "其他目录", "文件名")` 获取路径
 - 如需定时撤回消息，请在[发送消息 API](https://github.com/W1ndysBot/W1ndysBotFrame/blob/main/app/api/message.py) 的`note`参数中传入`del_msg=秒数`，例如`del_msg=10`
 - 获取 rkey 的实现在`app/core/nc_get_rkey.py`中，框架会每 10 分钟请求一次，获取 rkey 并保存到`app/data/Core/nc_get_rkey.json`中
