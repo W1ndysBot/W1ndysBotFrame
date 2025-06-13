@@ -48,6 +48,7 @@ W1ndysBotFrame，一款基于 NapCat 和 Python 开发的机器人程序。
 - 数据存储请在 `app/data` 下创建对应目录，使用`os.path.join("data", "其他目录", "文件名")` 获取路径
 - 如需定时撤回消息，请在[发送消息 API](https://github.com/W1ndysBot/W1ndysBotFrame/blob/main/app/api/message.py) 的`note`参数中传入`del_msg=秒数`，例如`del_msg=10`
 - 获取 rkey 的实现在`app/core/nc_get_rkey.py`中，框架会每 10 分钟请求一次，获取 rkey 并保存到`app/data/Core/nc_get_rkey.json`中
+- 同步 for 循环操作中，for 循环数量较大时，建议添加异步等待，或分批处理，可以使用`asyncio.sleep(秒数)`来等待以暂时交出控制权，不要使用`time.sleep(秒数)`，否则会导致阻塞，
 
 ## 更新方法
 
