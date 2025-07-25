@@ -306,3 +306,32 @@ def generate_node_message(user_id, nickname, content):
         "type": "node",
         "data": {"user_id": user_id, "nickname": nickname, "content": content},
     }
+
+
+def generate_file_message(file_bytes, name):
+    """
+    生成文件消息（传入文件二进制，自动转为base64编码）
+
+    Args:
+        file_bytes (bytes): 文件的二进制内容
+        name (str): 文件名，用于显示的文件名称
+
+    Returns:
+        dict: 包含文件消息段的字典，格式为:
+        {
+            "type": "file",
+            "data": {
+                "file": "base64://xxxxxx",  # 自动转为base64编码
+                "name": name
+            }
+        }
+
+    Note:
+        - 只需传入文件的二进制内容，函数会自动转为base64格式
+        - 文件大小限制请参考服务端配置
+        - name参数用于设置接收方看到的文件名
+    """
+    import base64
+
+    b64_data = base64.b64encode(file_bytes).decode("utf-8")
+    return {"type": "file", "data": {"file": f"base64://{b64_data}", "name": name}}

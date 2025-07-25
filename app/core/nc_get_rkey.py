@@ -28,11 +28,25 @@ def replace_rkey_match(match):
             # 读取本地rkey
             with open(DATA_DIR, "r", encoding="utf-8") as f:
                 rkey_json = json.load(f)
-            new_rkey = rkey_json.get("rkey")
+
+            # 只使用type=20的rkey
+            new_rkey = None
+            for rkey_item in rkey_json:
+                if rkey_item.get("type") == 20:
+                    new_rkey = rkey_item.get("rkey")
+                    break
+
             if new_rkey:
+                # 去掉rkey值开头的&rkey=前缀，只保留实际的rkey值
+                if new_rkey.startswith("&rkey="):
+                    new_rkey = new_rkey[6:]  # 去掉"&rkey="前缀
+
                 # 替换rkey参数
                 new_cq_img = re.sub(rkey_pattern, f"rkey={new_rkey}", cq_img)
+                logger.info(f"替换rkey成功: {new_cq_img}")
                 return new_cq_img
+            else:
+                logger.warning("未找到type=20的rkey，跳过替换")
     except Exception as e:
         logger.error(f"本地rkey替换失败: {e}")
     return match.group(0)
@@ -61,7 +75,7 @@ def replace_rkey(text):
         return text
 
 
-def save_rkey_to_file(item):
+def save_rkey_to_file(data_list):
     """
     保存rkey信息到文件，确保文件夹存在
     """
@@ -69,7 +83,7 @@ def save_rkey_to_file(item):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path, exist_ok=True)
     with open(DATA_DIR, "w", encoding="utf-8") as f:
-        json.dump(item, f, ensure_ascii=False, indent=2)
+        json.dump(data_list, f, ensure_ascii=False, indent=2)
 
 
 async def handle_events(websocket, msg):
@@ -107,16 +121,9 @@ async def handle_events(websocket, msg):
             match = re.search(r"nc_get_rkey", echo)
             if match:
                 data_list = msg.get("data", [])
-                for item in data_list:
-                    rkey = item.get("rkey")
-                    ttl = item.get("ttl")
-                    rkey_time = item.get("time")
-                    rkey_type = item.get("type")
-                    # 保存到文件
-                    save_rkey_to_file(item)
-                    logger.success(
-                        f"获取到nc_get_rkey: rkey={rkey}, ttl={ttl}, time={rkey_time}, type={rkey_type}，已保存到文件"
-                    )
+                # 保存到文件
+                save_rkey_to_file(data_list)
+                logger.success(f"获取到nc_get_rkey，已保存到文件")
     except Exception as e:
         logger.error(f"自动刷新rkey失败: {e}")
         await send_private_msg(websocket, OWNER_ID, f"自动刷新rkey失败: {e}")

@@ -52,7 +52,7 @@ class MenuManager:
                 return "暂无可用命令。"
             text = ""
             for cmd, desc in commands.items():
-                text += f"- {cmd}: {desc}\n"
+                text += f"{cmd}: {desc}\n\n"
             return text
         except Exception as e:
             logger.error(f"获取模块 {module_name} 命令信息失败: {e}")
@@ -102,7 +102,7 @@ async def handle_events(websocket, message):
                 [reply_message, text_message],
                 note="del_msg=30",
             )
-        elif message_type == "private":
+        elif message_type == "private" and message.get("sub_type") == "friend":
             user_id = str(message.get("user_id", ""))
             await send_private_msg(
                 websocket,
